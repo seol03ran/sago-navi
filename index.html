@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>사고내비 · 교통사고 현장 길잡이</title>
 <meta name="description" content="교통사고가 나면 앱을 켜세요. 말로 상황을 설명하면 AI가 정리하고, 지금 할 일과 법적 의무를 한 화면에 하나씩 알려 주며, 사진을 판독해 부족하면 다시 찍도록 안내합니다.">
 <meta property="og:title" content="사고내비 · 교통사고 현장 길잡이">
@@ -16,6 +16,9 @@
   --blue:#2272eb; --blue50:#e8f3ff; --red:#f04452; --red50:#ffeeee; --orange:#f18600; --orange50:#fff3e0; --green:#15a46e; --green50:#e5f8f0;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;overscroll-behavior:none}
+input,textarea,.doc,.ans,.kv .v{-webkit-user-select:text;user-select:text}
 [hidden]{display:none!important}
 html,body{margin:0;height:100%;overflow:hidden;background:#fff;color:var(--g900);font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:anywhere;letter-spacing:-.2px}
 button,input,textarea{font:inherit;color:inherit;letter-spacing:inherit}
@@ -175,7 +178,7 @@ textarea.talk:focus{box-shadow:inset 0 0 0 2px var(--blue)}
 @media (max-height:690px){main{padding-top:14px}.list{margin-top:12px}.row{min-height:58px}.desc{font-size:15.5px}.why{padding:11px 14px;font-size:13.5px}.btn{min-height:50px}.sosbtn{min-height:56px}.dock a{min-height:42px}.steps li{padding:8px 0}.kv{margin-top:12px}.kv div{padding:6px 0;font-size:14px}.call{min-height:56px}.calls{margin-top:14px}.callout{margin-top:10px;padding:11px 14px;font-size:14px}.plain li{padding:4px 0 4px 14px;font-size:14px}.plain li:before{top:13px}.thumbs img{width:48px;height:48px}.tiles button{min-height:52px}.hl{margin-bottom:12px}.field input{padding:11px 12px}}
 @media (max-height:600px){main{padding:10px 18px 8px}h1{font-size:20px}.lead{font-size:14px;margin-top:4px}.row{min-height:50px;font-size:16.5px}.row .ic{width:36px;height:36px}.row small{font-size:13px}
  .desc{font-size:14.5px;margin-top:8px}.why{font-size:12.5px;padding:9px 12px}.btn{min-height:46px;font-size:16px}.sosbtn{min-height:52px}.btns{margin-top:8px}
- .steps{margin-top:10px}.steps li{padding:5px 0;font-size:16px}.field label{font-size:12px;margin-bottom:3px}.field input{padding:9px 11px;font-size:15px}.fields{gap:6px}.locline{font-size:12.5px;margin-top:8px}
+ .steps{margin-top:10px}.steps li{padding:5px 0;font-size:16px}.field label{font-size:12px;margin-bottom:3px}.field input{padding:9px 11px;font-size:16px}.fields{gap:6px}.locline{font-size:12.5px;margin-top:8px}
  .call{min-height:48px;font-size:16px}.calls{margin-top:10px}.callout{padding:8px 12px;font-size:13px;margin-top:8px}.callout b{font-size:14.5px}.plain{margin-top:6px}.plain li{padding:2px 0 2px 14px;font-size:13px}.plain li:before{top:10px}
  .kv{margin-top:8px}.kv div{padding:4px 0;font-size:13px}.thumbs img{width:40px;height:40px}.tiles button{min-height:46px;font-size:12px}.dock a{min-height:40px}.res{font-size:13.5px;margin-top:8px}.res .rh b{font-size:15.5px}.res .meta{font-size:12px}.cam{margin-top:10px}.prev{margin-top:8px}.hl{margin-bottom:8px}}
 @media print{header,.dock,.btns{display:none!important}html,body{overflow:visible;height:auto}.app{height:auto}main{overflow:visible}}
@@ -783,6 +786,8 @@ function shareText(txt,title){if(navigator.share)navigator.share({title,text:txt
 
 /* ---------- 이벤트 ---------- */
 $("#back").addEventListener("click",goBack);
+["gesturestart","gesturechange","gestureend"].forEach(t=>document.addEventListener(t,e=>e.preventDefault(),{passive:false}));
+document.addEventListener("touchmove",e=>{if(e.touches.length>1)e.preventDefault()},{passive:false});
 $("#ttl").addEventListener("click",()=>{if(GROUP[S.screen]!=null)sheetSteps()});
 document.addEventListener("click",e=>{
   const t=e.target;
@@ -791,7 +796,7 @@ document.addEventListener("click",e=>{
   if(t.id==="sheet"){closeSheet();return}
   if(t.closest('a[href="#"]')){e.preventDefault();sheetIns();return}
   let el;
-  if(navigator.vibrate&&t.closest("button,a,label.btn,label.cam"))try{navigator.vibrate(8)}catch(_){}
+  if(navigator.vibrate&&e.isTrusted&&(!navigator.userActivation||navigator.userActivation.hasBeenActive)&&t.closest("button,a,label.btn,label.cam"))try{navigator.vibrate(8)}catch(_){}
   if(el=t.closest("[data-step]")){jumpStep(+el.dataset.step);return}
   if(el=t.closest("[data-mic]")){micToggle(el,$("#"+el.dataset.mic));return}
   if(el=t.closest("[data-fill]")){$("#"+el.dataset.fill).value=el.textContent;return}
