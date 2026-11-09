@@ -9,6 +9,12 @@
 <meta property="og:description" content="사고 직후, 지금 할 일을 하나씩. AI 상황 정리·사진 판독·현장 질문·경위서 초안.">
 <meta name="theme-color" content="#ffffff">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="사고내비">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
 :root{
@@ -253,6 +259,8 @@ const S={screen:"home",hist:[],started:null,injured:null,place:null,type:null,ro
   other:{name:"",phone:"",plate:"",insurer:""},memo:"",loc:null,locErr:false,fault12:new Set(),demo:false,
   auto:false,aiSummary:"",qa:[],filled:new Set(),maxG:0};
 
+/* 증거용 원본 사진(상자 표시 없음). 이 휴대폰 메모리에만 두고, '공유·저장'으로 앨범·보험사에 보낸다 */
+const FILES={};
 const GROUP={injured:0,call119:0,place:0,bitbox:0,type:1,role:1,actions:2,photos:3,info:4,wait:5,report:6};
 const GNAME=["안전 확인","사고 유형","지금 할 일","사진 남기기","상대 정보","연락","사고 기록"];
 const FAULT12=["신호·지시 위반","중앙선 침범","제한속도보다 20km/h 넘게 과속","앞지르기 방법·금지 위반","철길건널목 통과방법 위반","횡단보도 보행자 보호의무 위반","무면허 운전","음주·약물 운전","보도 침범·보도 횡단방법 위반","승객 추락방지의무 위반","어린이보호구역 안전운전의무 위반(어린이 상해)","화물 고정조치 위반(화물 낙하)"];
@@ -674,7 +682,7 @@ R.report=()=>{
   <div class="thumbs">${ph.filter(s=>S.photos[s.id].url).map(s=>`<img src="${S.photos[s.id].url}" data-zoom="${s.id}" alt="${s.t}">`).join("")}</div>
   <div class="grow"></div>
   <div class="btns"><button class="btn" data-a="doc">AI로 경위서 쓰기</button>
-  <div class="tiles"><button data-a="share">${ic("share")}공유</button><button data-a="print">${ic("print")}PDF</button><button data-a="todo">${ic("list")}할 일</button><button data-a="reset">${ic("redo")}처음으로</button></div></div>`;
+  <div class="tiles"><button data-a="share">${ic("share")}공유·저장</button><button data-a="print">${ic("print")}PDF</button><button data-a="todo">${ic("list")}할 일</button><button data-a="reset">${ic("redo")}처음으로</button></div></div>`;
 };
 
 /* ---------- 시트 ---------- */
@@ -780,8 +788,21 @@ setInterval(tick,1000);
 function reportText(){
   return `[사고 기록]\n시각: ${S.started?fmt(S.started):"-"}\n위치: ${S.loc?`https://map.kakao.com/link/map/사고위치,${S.loc.lat},${S.loc.lng}`:"미기록"}\n유형: ${TNAME[S.type]||"-"}\n부상자: ${INAME[S.injured]||"-"}\n상대방: ${[S.other.name,S.other.phone,S.other.plate,S.other.insurer].filter(Boolean).join(" / ")||"미기록"}\n사진: ${buildShots().filter(s=>S.photos[s.id]).map(s=>s.t).join(", ")||"없음"}\n메모: ${S.memo||"-"}`;
 }
-function freshCase(){Object.assign(S,{hist:[],started:null,injured:null,place:null,type:null,role:null,ai:0,pi:0,done:new Set(),photos:{},extra:[],busy:null,other:{name:"",phone:"",plate:"",insurer:""},memo:"",loc:null,locErr:false,fault12:new Set(),auto:false,aiSummary:"",qa:[],filled:new Set(),maxG:0,demo:false,_triage:null,_doc:null})}
+function freshCase(){for(const k in FILES)delete FILES[k];Object.assign(S,{hist:[],started:null,injured:null,place:null,type:null,role:null,ai:0,pi:0,done:new Set(),photos:{},extra:[],busy:null,other:{name:"",phone:"",plate:"",insurer:""},memo:"",loc:null,locErr:false,fault12:new Set(),auto:false,aiSummary:"",qa:[],filled:new Set(),maxG:0,demo:false,_triage:null,_doc:null})}
 function start(demo){freshCase();S.started=Date.now();S.demo=demo;S.auto=false;S.hist=[];loadModel();getLoc();if(demo)toast("체험 모드예요. 아무 차 사진으로 AI 판독을 써 보세요");go("injured")}
+/* 사고 기록 + 사진 원본을 공유 시트로: '이미지 저장'으로 앨범에 남기거나 보험사·가족에게 바로 보낼 수 있다 */
+async function shareAll(){
+  const txt=reportText();const L=buildShots().filter(s=>S.photos[s.id]);const files=[];
+  for(let i=0;i<L.length;i++){const s=L[i];const nm=`사고사진_${i+1}_${s.t.replace(/[\\/:*?"<>|·]/g," ").trim()}.jpg`;
+    try{if(FILES[s.id])files.push(new File([FILES[s.id]],nm,{type:FILES[s.id].type||"image/jpeg"}));
+      else if(S.photos[s.id].url){const b=await(await fetch(S.photos[s.id].url)).blob();files.push(new File([b],nm,{type:"image/jpeg"}))}}catch(e){}}
+  if(files.length&&navigator.canShare&&navigator.canShare({files})){
+    toast(`사진 ${files.length}장과 기록을 보내요. ‘이미지 저장’을 누르면 앨범에 남아요`);
+    try{await navigator.share({title:"사고 기록",text:txt,files});return}catch(e){if(e&&e.name==="AbortError")return}
+  }
+  if(files.length)toast("이 브라우저는 사진 공유를 지원하지 않아 기록 글만 보내요");
+  shareText(txt,"사고 기록");
+}
 function shareText(txt,title){if(navigator.share)navigator.share({title,text:txt}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(txt).then(()=>toast("복사했어요"))}
 
 /* ---------- 이벤트 ---------- */
@@ -831,7 +852,7 @@ document.addEventListener("click",e=>{
     case "loc":toast("위치를 찾고 있어요");getLoc(()=>toast("위치를 기록했어요"));break;
     case "f12":sheetF12();break;
     case "todo":sheetTodo();break;
-    case "share":shareText(reportText(),"사고 기록");break;
+    case "share":shareAll();break;
     case "print":window.print();break;
     case "reset":sheetReset();break;
     case "resetGo":freshCase();S.screen="home";closeSheet();render("bwd");toast("기록을 지웠어요");break;
@@ -846,12 +867,16 @@ document.addEventListener("change",async e=>{
   const file=e.target.files[0];const shot=buildShots().find(s=>s.id===id);
   S.busy=id;render();
   let n=0;while(modelState==="loading"&&n++<150)await new Promise(r=>setTimeout(r,100));
-  let p=null;try{p=await analyze(shot,file);S.photos[id]=p}catch(err){toast("사진을 읽지 못했어요. 다시 시도해 주세요")}
+  let p=null;try{p=await analyze(shot,file);S.photos[id]=p;FILES[id]=file}catch(err){toast("사진을 읽지 못했어요. 다시 시도해 주세요")}
   S.busy=null;render();
   if(p)gptPhoto(shot,p);
 });
 window.__SN={S,buildActions,buildShots,analyze,render,go,gpt,gptPhoto,get modelState(){return modelState},get gptState(){return gptState},loadModel,sheetTalk,sheetAsk,sheetDoc,sheetDictate};
 gptPing();
+/* 한 번 열어 두면 신호가 약한 곳(고속도로·터널)에서도 앱이 열리게: 서비스 워커 캐시 */
+if("serviceWorker" in navigator&&window.isSecureContext)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+/* 오프라인 저장이 켜진 뒤에는 사진 판독 모델도 미리 받아 둔다(데이터 절약 모드면 건너뜀) */
+if(navigator.serviceWorker&&navigator.serviceWorker.controller&&navigator.onLine&&!(navigator.connection&&navigator.connection.saveData))setTimeout(loadModel,4000);
 if(restoreCase()){loadModel();toast("하던 곳부터 이어서 보여 드려요")}
 render();
 })();
