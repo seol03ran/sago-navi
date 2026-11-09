@@ -26,15 +26,27 @@ header{flex:none;padding-top:env(safe-area-inset-top);background:#fff}
 .nav{display:flex;align-items:center;height:52px;padding:0 8px 0 4px;gap:4px}
 .back{width:44px;height:44px;display:grid;place-items:center;color:var(--g900)}
 .back svg.i{width:26px;height:26px;stroke-width:2}
-.ttl{flex:1;min-width:0;padding-left:6px}
+.ttl{flex:1;min-width:0;padding:4px 6px;border-radius:10px}
+.ttl:active{background:var(--g50)}
+.ttl b svg.i{width:16px;height:16px;color:var(--g400);stroke-width:2.2;margin-left:2px;vertical-align:-2px}
 .ttl b{display:block;font-size:17px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ttl small{display:block;font-size:12px;color:var(--g500);font-variant-numeric:tabular-nums;margin-top:1px}
 .ttl.logo b{font-size:19px;font-weight:800;letter-spacing:-.5px}
 .askbtn{height:36px;padding:0 12px;border-radius:10px;color:var(--blue);font-weight:600;font-size:15px}
 .askbtn:active{background:var(--blue50)}
-.bar{height:3px;background:var(--g100)}
-.bar i{display:block;height:100%;background:var(--blue);transition:width .3s}
-main{flex:1;min-height:0;display:flex;flex-direction:column;padding:20px 20px 12px;overflow-y:auto}
+.bar{height:3px;display:flex;gap:3px;padding:0 4px}
+.bar i{flex:1;height:100%;border-radius:2px;background:var(--g100);transition:background .35s}
+.bar i.on{background:var(--blue)}
+main{flex:1;min-height:0;display:flex;flex-direction:column;padding:20px 20px 12px;overflow-y:auto;overflow-x:hidden}
+@keyframes inR{from{opacity:0;transform:translateX(32px)}to{opacity:1;transform:none}}
+@keyframes inL{from{opacity:0;transform:translateX(-32px)}to{opacity:1;transform:none}}
+@keyframes up{from{transform:translateY(100%)}to{transform:none}}
+@keyframes fade{from{opacity:0}}
+main.fwd{animation:inR .26s cubic-bezier(.2,.8,.2,1)}
+main.bwd{animation:inL .26s cubic-bezier(.2,.8,.2,1)}
+.sheetbg:not([hidden]){animation:fade .2s}
+.sheetbg .sheet{animation:up .3s cubic-bezier(.2,.8,.2,1)}
+@media (prefers-reduced-motion:reduce){main.fwd,main.bwd,.sheetbg:not([hidden]),.sheetbg .sheet{animation:none}}
 .grow{flex:1;min-height:8px}
 h1{font-size:clamp(23px,3.6dvh,27px);line-height:1.36;margin:0;letter-spacing:-.7px;font-weight:700;flex:none}
 .lead{color:var(--g600);margin:8px 0 0;line-height:1.5;font-size:15.5px;flex:none}
@@ -46,12 +58,21 @@ h1{font-size:clamp(23px,3.6dvh,27px);line-height:1.36;margin:0;letter-spacing:-.
 .row .ic{flex:none;width:42px;height:42px;border-radius:50%;background:var(--g100);color:var(--g700);display:grid;place-items:center}
 .row .ic.red{background:var(--red50);color:var(--red)}
 .row .ic.blue{background:var(--blue50);color:var(--blue)}
+.row .ic.green{background:var(--green50);color:var(--green)}
+.row .ic.cur{background:var(--blue);color:#fff}
+.row .ic b{font-size:15px;font-weight:700}
+.row.st{min-height:58px;padding:6px 2px}
+.row.st[disabled]{cursor:default;opacity:.5}
+.row.st.now{opacity:1}
+.row.st[disabled]:active{background:none}
+.row.st.now .tx{color:var(--blue)}
 .row .tx{flex:1}
 .row small{display:block;font-size:14px;font-weight:400;color:var(--g600);margin-top:3px}
 .row .ch{color:var(--g400);width:20px;height:20px}
 .row:active{background:var(--g50)}
 .btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;border-radius:14px;background:var(--blue);color:#fff;font-weight:600;font-size:17px;min-height:56px;padding:0 16px;text-decoration:none;text-align:center}
-.btn:active{filter:brightness(.94)}
+.btn{transition:transform .12s}
+.btn:active{filter:brightness(.94);transform:scale(.985)}
 .btn.red{background:var(--red)}
 .btn.sub{background:var(--g100);color:var(--g800)}
 .btn.lt{background:var(--blue50);color:var(--blue)}
@@ -127,6 +148,10 @@ input[type=file]{display:none}
 .sheet .lead{margin:0}
 .chk{display:flex;gap:12px;align-items:center;font-size:15.5px;padding:10px 0;border-bottom:1px solid var(--g100)}
 .chk input{width:22px;height:22px;accent-color:var(--red);flex:none}
+.chk.b input{accent-color:var(--blue)}
+.chk .dt{font-size:12.5px;color:var(--red);font-weight:600;margin-left:6px;white-space:nowrap}
+.sec{font-size:13px;color:var(--g500);font-weight:600;margin-top:4px}
+.linkbtn{color:var(--red);font-weight:600;text-decoration:underline;text-underline-offset:3px}
 textarea.talk{width:100%;min-height:96px;resize:none;border:none;border-radius:14px;background:var(--g100);padding:14px;font-size:16px;line-height:1.5;outline:none}
 textarea.talk:focus{box-shadow:inset 0 0 0 2px var(--blue)}
 .talkrow{display:flex;gap:8px}
@@ -161,10 +186,10 @@ textarea.talk:focus{box-shadow:inset 0 0 0 2px var(--blue)}
   <header>
     <div class="nav">
       <button class="back" id="back" aria-label="이전" hidden><svg class="i" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
-      <div class="ttl" id="ttl"><b id="ttlB">사고내비</b><small id="ttlS" hidden></small></div>
+      <button class="ttl" id="ttl" aria-label="진행 상황 보기"><b><span id="ttlB">사고내비</span><svg class="i" id="ttlC" viewBox="0 0 24 24" hidden><path d="M6 9l6 6 6-6"/></svg></b><small id="ttlS" hidden></small></button>
       <button class="askbtn" data-a="ask">AI에게 질문</button>
     </div>
-    <div class="bar" id="bar" hidden><i id="barI"></i></div>
+    <div class="bar" id="bar" hidden></div>
   </header>
   <main id="view"></main>
   <nav class="dock">
@@ -223,7 +248,7 @@ const ic=(n,c)=>`<svg class="i ${c||""}" viewBox="0 0 24 24" aria-hidden="true">
 const S={screen:"home",hist:[],started:null,injured:null,place:null,type:null,role:null,
   ai:0,pi:0,done:new Set(),photos:{},extra:[],busy:null,
   other:{name:"",phone:"",plate:"",insurer:""},memo:"",loc:null,locErr:false,fault12:new Set(),demo:false,
-  auto:false,aiSummary:"",qa:[],filled:new Set()};
+  auto:false,aiSummary:"",qa:[],filled:new Set(),maxG:0};
 
 const GROUP={injured:0,call119:0,place:0,bitbox:0,type:1,role:1,actions:2,photos:3,info:4,wait:5,report:6};
 const GNAME=["안전 확인","사고 유형","지금 할 일","사진 남기기","상대 정보","연락","사고 기록"];
@@ -418,12 +443,12 @@ async function talkGo(){
     <button class="btn" data-a="talkStart" style="margin-top:12px">맞아요, 시작할게요</button>`;
 }
 function talkStart(){
-  const r=S._triage;if(!r)return;
+  const r=S._triage;if(!r)return;freshCase();
   S.injured=r.injured==="no"?"no":r.injured==="yes"?"yes":"unknown";
   S.place=r.place!=="unknown"?r.place:null;S.type=r.type!=="unknown"?r.type:null;
   S.role=(S.type==="car"||S.type==="person")&&r.role!=="unknown"?r.role:null;
   S.auto=true;S.aiSummary=r.summary||"";S.ai=0;S.pi=0;S.extra=[];
-  S.started=Date.now();S.hist=[];loadModel();getLoc();closeSheet();
+  S.started=Date.now();S.hist=[];S.maxG=0;loadModel();getLoc();closeSheet();
   go(S.injured!=="no"?"call119":nextScreen("call119"));toast("AI가 답을 채웠어요");
 }
 function nextScreen(cur){
@@ -511,8 +536,15 @@ async function sheetDoc(){
 }
 
 /* ---------- 이동 ---------- */
-function go(s){S.hist.push({screen:S.screen,ai:S.ai,pi:S.pi});S.screen=s;closeSheet();render()}
-function back(){const h=S.hist.pop();if(!h)return;S.screen=h.screen;S.ai=h.ai;S.pi=h.pi;closeSheet();render()}
+/* 휴대폰의 뒤로 가기(제스처·버튼)와 화면 이동을 맞춰 둠 */
+function push(){S.hist.push({screen:S.screen,ai:S.ai,pi:S.pi});try{history.pushState({sn:S.hist.length},"")}catch(e){}}
+function go(s){push();S.screen=s;closeSheet();render("fwd")}
+function back(){const h=S.hist.pop();if(!h)return;S.screen=h.screen;S.ai=h.ai;S.pi=h.pi;closeSheet();render("bwd")}
+window.addEventListener("popstate",()=>{
+  if(!$("#sheet").hidden){closeSheet();try{history.pushState({sn:S.hist.length},"")}catch(e){}return}
+  if(S.hist.length&&S.screen!=="home")back();
+});
+function goBack(){if(!S.hist.length)return;try{history.back()}catch(e){back()}}
 
 /* ---------- 화면 ---------- */
 function o(attr,icon,label,sub,cls){return `<button class="row" ${attr}><span class="ic ${cls||""}">${ic(icon)}</span><span class="tx">${label}${sub?`<small>${sub}</small>`:""}</span>${ic("chev","ch")}</button>`}
@@ -579,7 +611,7 @@ R.photos=()=>{
     const g=p.gpt&&typeof p.gpt==="object"?p.gpt:null;
     const text=g?esc(g.message):p.msg.join(" ");
     const by=g?"GPT-6 Luna 판독":p.gpt==="busy"?'<span class="spin" style="width:12px;height:12px"></span>GPT가 한 번 더 보는 중':"휴대폰 AI 판독";
-    body=`<div class="prev" data-zoom="${s.id}"><img src="${p.url}" alt="사진 분석 결과"></div>
+    body=`${p.url?`<div class="prev" data-zoom="${s.id}"><img src="${p.url}" alt="사진 분석 결과"></div>`:`<div class="cam" style="cursor:default">${ic("img")}판독 결과만 남아 있어요<small>사진이 필요하면 다시 찍어 주세요</small></div>`}
     <div class="res ${p.status}"><div class="rh"><span class="dot"></span><b>${lab[p.status]}</b><span class="by" style="margin-left:auto">${by}</span></div>${text}<div class="meta">${g&&g.seen?esc(g.seen)+" · ":""}인식: ${p.tags.join(", ")||"없음"}</div></div>`;
     btns=p.status==="retry"
       ?`<label class="btn red">다시 찍기<input type="file" accept="image/*" capture="environment" data-shot="${s.id}"></label><button class="btn sub" data-a="shotNext">그래도 ${nextLabel}</button>`
@@ -632,13 +664,13 @@ R.report=()=>{
     <div><span>언제</span><span class="v">${S.started?fmt(S.started):"-"}<br>${locText()}</span></div>
     <div><span>사고</span><span class="v">${PNAME[S.place]||"-"} · ${TNAME[S.type]||"-"}${RO} · 부상자 ${INAME[S.injured]||"-"}</span></div>
     ${S.type!=="single"?`<div><span>상대</span><span class="v">${esc([S.other.name,S.other.phone,S.other.plate,S.other.insurer].filter(Boolean).join(" · "))||"적지 않음"}</span></div>`:""}
-    <div><span>한 일</span><span class="v">${dn}/${A.length}개${miss?` · <b style="color:var(--red)">법적 의무 ${miss}개를 확인해 주세요</b>`:""}</span></div>
+    <div><span>한 일</span><span class="v">${dn}/${A.length}개${miss?` · <button class="linkbtn" data-a="todo">법적 의무 ${miss}개 확인</button>`:""}</span></div>
     ${S.memo?`<div><span>메모</span><span class="v">${esc(S.memo)}</span></div>`:""}
   </div>
-  <div class="thumbs">${ph.map(s=>`<img src="${S.photos[s.id].url}" data-zoom="${s.id}" alt="${s.t}">`).join("")}</div>
+  <div class="thumbs">${ph.filter(s=>S.photos[s.id].url).map(s=>`<img src="${S.photos[s.id].url}" data-zoom="${s.id}" alt="${s.t}">`).join("")}</div>
   <div class="grow"></div>
   <div class="btns"><button class="btn" data-a="doc">AI로 경위서 쓰기</button>
-  <div class="tiles"><button data-a="share">${ic("share")}공유</button><button data-a="print">${ic("print")}PDF</button><button data-a="next3">${ic("list")}앞으로</button><button data-a="reset">${ic("redo")}처음으로</button></div></div>`;
+  <div class="tiles"><button data-a="share">${ic("share")}공유</button><button data-a="print">${ic("print")}PDF</button><button data-a="todo">${ic("list")}할 일</button><button data-a="reset">${ic("redo")}처음으로</button></div></div>`;
 };
 
 /* ---------- 시트 ---------- */
@@ -652,7 +684,38 @@ function sheetF12(){openSheet(`<h2>형사처벌 대상인지 확인</h2>
   <div>${FAULT12.map((f,i)=>`<label class="chk"><input type="checkbox" data-f12="${i}" ${S.fault12.has(i)?"checked":""}>${f}</label>`).join("")}</div>
   <div id="f12res"></div><button class="btn sub" data-a="close">닫기</button>`);f12()}
 function f12(){const el=$("#f12res");if(!el)return;el.innerHTML=S.fault12.size?`<div class="callout red" style="margin:0"><b>보험과 별개로 형사처벌될 수 있어요</b>진술은 사실대로 하고, 조사 전에 대한법률구조공단(132)이나 변호사와 상담하세요. 피해자와 합의하면 양형에 반영될 수 있어요.</div>`:`<div class="callout" style="margin:0"><b>해당하는 게 없다면</b>종합보험에 가입돼 있고 피해자가 중상해가 아니면 공소가 제기되지 않아요(교통사고처리특례법 제4조 제1항).</div>`}
-function sheetNext3(){openSheet(`<h2>앞으로 할 일</h2>
+/* 진행 상황 */
+const GTARGET=["injured","type","actions","photos","info","wait","report"];
+function stepSub(i){
+  const A=buildActions(),L=buildShots();
+  return [
+    [S.injured&&"부상자 "+INAME[S.injured],PNAME[S.place]].filter(Boolean).join(" · "),
+    [TNAME[S.type],S.role&&RNAME[S.role]].filter(Boolean).join(" · "),
+    S.maxG>=2?`${A.filter(a=>S.done.has(a.id)).length}/${A.length}개 했어요`:"",
+    S.maxG>=3?`${L.filter(s=>S.photos[s.id]).length}/${L.length}장 찍었어요`:"",
+    [S.other.name,S.other.plate].filter(Boolean).join(" · "),
+    "","" ][i]||"";
+}
+function sheetSteps(){
+  const g=GROUP[S.screen];
+  openSheet(`<h2>진행 상황</h2><p class="lead">지나온 단계는 눌러서 다시 볼 수 있어요.</p>
+  <div>${GNAME.map((n,i)=>{const now=i===g,can=i<=S.maxG&&!now,done=i<S.maxG||(i<g);
+    const icn=now?`<span class="ic cur"><b>${i+1}</b></span>`:done?`<span class="ic green">${ic("ok")}</span>`:`<span class="ic"><b>${i+1}</b></span>`;
+    const sub=now?"지금 여기예요":i<=S.maxG?stepSub(i):"";
+    return `<button class="row st${now?" now":""}" ${can?`data-step="${i}"`:"disabled"}>${icn}<span class="tx">${n}${sub?`<small>${esc(sub)}</small>`:""}</span>${can?ic("chev","ch"):""}</button>`}).join("")}</div>`);
+}
+function jumpStep(i){
+  if(i===0){go("injured");return}
+  if(i===2)S.ai=0;if(i===3)S.pi=0;
+  go(GTARGET[i]);
+}
+/* 할 일 체크 */
+function sheetTodo(){
+  const A=buildActions();
+  openSheet(`<h2>할 일</h2><p class="lead">현장에서 한 일을 체크하고, 사고 뒤에 할 일도 확인하세요.</p>
+  <div class="sec">현장에서</div>
+  <div>${A.map(a=>`<label class="chk b"><input type="checkbox" data-todo="${a.id}" ${S.done.has(a.id)?"checked":""}><span style="flex:1">${a.title}${a.kind==="duty"?'<span class="dt">법적 의무</span>':""}</span></label>`).join("")}</div>
+  <div class="sec">사고 뒤에</div>
   <div class="kv box">
   <div><span>보험</span><span class="v">접수번호를 받아 두세요. 과실비율은 손해보험협회 기준에 따라 정해지고, 보험사끼리 다투면 구상금분쟁심의위원회가 심의해요.</span></div>
   ${S.injured!=="no"?`<div><span>형사</span><span class="v">사람이 다친 사고는 경찰 조사를 받아요. 종합보험 가입과 12대 중과실 해당 여부에 따라 처벌이 갈려요(교통사고처리특례법 제3조·제4조). 무료 상담 132.</span></div>
@@ -660,21 +723,47 @@ function sheetNext3(){openSheet(`<h2>앞으로 할 일</h2>
   ${S.type==="single"?`<div><span>도로</span><span class="v">도로 관리 잘못이 원인이면 도로관리청에 배상을 청구할 수 있어요(국가배상법 제5조).</span></div>`:""}
   <div><span>진료</span><span class="v">아프면 바로 진료받고 진단서·영수증을 모아 두세요.</span></div></div>
   <button class="btn sub" data-a="close">닫기</button>`)}
+function sheetReset(){openSheet(`<h2>처음으로 돌아갈까요?</h2>
+  <p class="lead">사고 기록과 사진이 이 휴대폰에서 지워져요. 필요하면 먼저 ‘공유’나 ‘PDF’로 남겨 두세요.</p>
+  <div class="two"><button class="btn sub" data-a="close">취소</button><button class="btn red" data-a="resetGo">지우기</button></div>`)}
+/* 새로고침·탭 정리에도 기록 유지 (이 탭에만, 서버로 보내지 않음) */
+const CASE_KEY="sagonavi_case";let saveT=null;
+function saveSoon(){clearTimeout(saveT);saveT=setTimeout(saveCase,250)}
+function saveCase(){
+  try{
+    if(!S.started){sessionStorage.removeItem(CASE_KEY);return}
+    const ph={};for(const k in S.photos){const p=S.photos[k];ph[k]={status:p.status,msg:p.msg,tags:p.tags,blur:p.blur,gpt:p.gpt&&typeof p.gpt==="object"?p.gpt:null,url:p.url}}
+    const d={v:1,at:Date.now(),screen:S.screen,hist:S.hist,started:S.started,injured:S.injured,place:S.place,type:S.type,role:S.role,ai:S.ai,pi:S.pi,done:[...S.done],extra:S.extra,other:S.other,memo:S.memo,loc:S.loc,fault12:[...S.fault12],demo:S.demo,auto:S.auto,aiSummary:S.aiSummary,qa:S.qa,filled:[...S.filled],maxG:S.maxG,photos:ph};
+    try{sessionStorage.setItem(CASE_KEY,JSON.stringify(d))}catch(e){for(const k in ph)ph[k].url=null;sessionStorage.setItem(CASE_KEY,JSON.stringify(d))}
+  }catch(e){}
+}
+function restoreCase(){
+  try{
+    const d=JSON.parse(sessionStorage.getItem(CASE_KEY)||"null");
+    if(!d||!d.started||Date.now()-d.at>6*3600e3||!R[d.screen])return false;
+    Object.assign(S,d,{done:new Set(d.done),fault12:new Set(d.fault12),filled:new Set(d.filled),busy:null});
+    for(const k in S.photos)if(!S.photos[k].url)S.photos[k].url="";
+    for(let i=0;i<S.hist.length;i++)history.pushState({sn:i+1},"");
+    return true;
+  }catch(e){return false}
+}
 
 /* ---------- 공통 ---------- */
-function render(){
+function render(dir){
   view.innerHTML=R[S.screen]();view.scrollTop=0;
-  const g=GROUP[S.screen];
+  view.classList.remove("fwd","bwd");if(dir){void view.offsetWidth;view.classList.add(dir)}
+  const g=GROUP[S.screen];if(g!=null&&g>S.maxG)S.maxG=g;
   let title="사고내비",sub="";
   if(S.screen==="actions"){const A=buildActions();title=`지금 할 일 ${Math.min(S.ai,A.length-1)+1}/${A.length}`}
   else if(S.screen==="photos"){const L=buildShots();title=`사진 ${Math.min(S.pi,L.length-1)+1}/${L.length}`}
   else if(g!=null)title=GNAME[g];
-  $("#ttl").classList.toggle("logo",g==null);$("#ttlB").textContent=title;
-  $("#bar").hidden=g==null;if(g!=null)$("#barI").style.width=((g+1)/7*100)+"%";
+  $("#ttl").classList.toggle("logo",g==null);$("#ttlB").textContent=title;$("#ttlC").hidden=g==null;$("#ttl").disabled=g==null;
+  $("#bar").hidden=g==null;if(g!=null)$("#bar").innerHTML=GNAME.map((_,i)=>`<i class="${i<=g?"on":""}"></i>`).join("");
   $("#back").hidden=!S.hist.length||S.screen==="home";
   $("#ttlS").hidden=!S.started||g==null;tick();
   $("#dockIns").href=insHref();$("#dockIns").textContent=my.insurer||"내 보험사";
   if(S.screen==="photos")loadModel();
+  saveSoon();
 }
 function insHref(){return my.phone?"tel:"+my.phone.replace(/[^0-9+]/g,""):"#"}
 function esc(s){return String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
@@ -687,11 +776,13 @@ setInterval(tick,1000);
 function reportText(){
   return `[사고 기록]\n시각: ${S.started?fmt(S.started):"-"}\n위치: ${S.loc?`https://map.kakao.com/link/map/사고위치,${S.loc.lat},${S.loc.lng}`:"미기록"}\n유형: ${TNAME[S.type]||"-"}\n부상자: ${INAME[S.injured]||"-"}\n상대방: ${[S.other.name,S.other.phone,S.other.plate,S.other.insurer].filter(Boolean).join(" / ")||"미기록"}\n사진: ${buildShots().filter(s=>S.photos[s.id]).map(s=>s.t).join(", ")||"없음"}\n메모: ${S.memo||"-"}`;
 }
-function start(demo){S.started=Date.now();S.demo=demo;S.auto=false;S.hist=[];loadModel();getLoc();if(demo)toast("체험 모드예요. 아무 차 사진으로 AI 판독을 써 보세요");go("injured")}
+function freshCase(){Object.assign(S,{hist:[],started:null,injured:null,place:null,type:null,role:null,ai:0,pi:0,done:new Set(),photos:{},extra:[],busy:null,other:{name:"",phone:"",plate:"",insurer:""},memo:"",loc:null,locErr:false,fault12:new Set(),auto:false,aiSummary:"",qa:[],filled:new Set(),maxG:0,demo:false,_triage:null,_doc:null})}
+function start(demo){freshCase();S.started=Date.now();S.demo=demo;S.auto=false;S.hist=[];loadModel();getLoc();if(demo)toast("체험 모드예요. 아무 차 사진으로 AI 판독을 써 보세요");go("injured")}
 function shareText(txt,title){if(navigator.share)navigator.share({title,text:txt}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(txt).then(()=>toast("복사했어요"))}
 
 /* ---------- 이벤트 ---------- */
-$("#back").addEventListener("click",back);
+$("#back").addEventListener("click",goBack);
+$("#ttl").addEventListener("click",()=>{if(GROUP[S.screen]!=null)sheetSteps()});
 document.addEventListener("click",e=>{
   const t=e.target;
   if(t.closest("#lb")){$("#lb").hidden=true;return}
@@ -699,6 +790,8 @@ document.addEventListener("click",e=>{
   if(t.id==="sheet"){closeSheet();return}
   if(t.closest('a[href="#"]')){e.preventDefault();sheetIns();return}
   let el;
+  if(navigator.vibrate&&t.closest("button,a,label.btn,label.cam"))try{navigator.vibrate(8)}catch(_){}
+  if(el=t.closest("[data-step]")){jumpStep(+el.dataset.step);return}
   if(el=t.closest("[data-mic]")){micToggle(el,$("#"+el.dataset.mic));return}
   if(el=t.closest("[data-fill]")){$("#"+el.dataset.fill).value=el.textContent;return}
   if(el=t.closest("[data-askq]")){askGo(el.dataset.askq);return}
@@ -727,19 +820,21 @@ document.addEventListener("click",e=>{
     case "close":closeSheet();break;
     case "saveIns":my={insurer:$("#myIns").value.trim(),phone:$("#myPhone").value.trim()};store.set("sagonavi_my",my);closeSheet();toast("저장했어요");render();break;
     case "actDone":S.done.add(A[Math.min(S.ai,A.length-1)].id);/* falls through */
-    case "actSkip":if(S.ai<A.length-1){S.hist.push({screen:"actions",ai:S.ai,pi:S.pi});S.ai++;render()}else{S.pi=0;go("photos")}break;
-    case "shotNext":{const L=buildShots();if(S.pi<L.length-1){S.hist.push({screen:"photos",ai:S.ai,pi:S.pi});S.pi++;render()}else go("info");break}
+    case "actSkip":if(S.ai<A.length-1){push();S.ai++;render("fwd")}else{S.pi=0;go("photos")}break;
+    case "shotNext":{const L=buildShots();if(S.pi<L.length-1){push();S.pi++;render("fwd")}else go("info");break}
     case "loc":toast("위치를 찾고 있어요");getLoc(()=>toast("위치를 기록했어요"));break;
     case "f12":sheetF12();break;
-    case "next3":sheetNext3();break;
+    case "todo":sheetTodo();break;
     case "share":shareText(reportText(),"사고 기록");break;
     case "print":window.print();break;
-    case "reset":if(confirm("사고 기록을 모두 지울까요?")){Object.assign(S,{screen:"home",hist:[],started:null,injured:null,place:null,type:null,role:null,ai:0,pi:0,done:new Set(),photos:{},extra:[],other:{name:"",phone:"",plate:"",insurer:""},memo:"",loc:null,locErr:false,fault12:new Set(),auto:false,aiSummary:"",qa:[],filled:new Set()});render()}break;
+    case "reset":sheetReset();break;
+    case "resetGo":freshCase();S.screen="home";closeSheet();render("bwd");toast("기록을 지웠어요");break;
   }
 });
-document.addEventListener("input",e=>{if(e.target.dataset.o){S.other[e.target.dataset.o]=e.target.value;S.filled.delete(e.target.dataset.o);e.target.classList.remove("filled")}if(e.target.id==="memo")S.memo=e.target.value});
+document.addEventListener("input",e=>{if(e.target.dataset.o){S.other[e.target.dataset.o]=e.target.value;S.filled.delete(e.target.dataset.o);e.target.classList.remove("filled")}if(e.target.id==="memo")S.memo=e.target.value;saveSoon()});
 document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.id==="askTxt"&&!e.shiftKey){e.preventDefault();askGo()}});
 document.addEventListener("change",async e=>{
+  if(e.target.dataset.todo){const id=e.target.dataset.todo;e.target.checked?S.done.add(id):S.done.delete(id);render();return}
   if(e.target.dataset.f12!=null){const i=+e.target.dataset.f12;e.target.checked?S.fault12.add(i):S.fault12.delete(i);f12();return}
   const id=e.target.dataset.shot;if(!id||!e.target.files||!e.target.files[0])return;
   const file=e.target.files[0];const shot=buildShots().find(s=>s.id===id);
@@ -751,6 +846,7 @@ document.addEventListener("change",async e=>{
 });
 window.__SN={S,buildActions,buildShots,analyze,render,go,gpt,gptPhoto,get modelState(){return modelState},get gptState(){return gptState},loadModel,sheetTalk,sheetAsk,sheetDoc,sheetDictate};
 gptPing();
+if(restoreCase()){loadModel();toast("하던 곳부터 이어서 보여 드려요")}
 render();
 })();
 </script>
