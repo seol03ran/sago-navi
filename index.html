@@ -7,208 +7,174 @@
 <meta name="description" content="교통사고가 나면 앱을 켜세요. 말로 상황을 설명하면 AI가 정리하고, 지금 할 일과 법적 의무를 한 화면에 하나씩 알려 주며, 사진을 판독해 부족하면 다시 찍도록 안내합니다.">
 <meta property="og:title" content="사고내비 · 교통사고 현장 길잡이">
 <meta property="og:description" content="사고 직후, 지금 할 일을 하나씩. AI 상황 정리·사진 판독·현장 질문·경위서 초안.">
-<meta name="theme-color" content="#16181b">
+<meta name="theme-color" content="#ffffff">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&display=swap">
 <style>
 :root{
-  --paper:#efece4; --card:#fbfaf6; --ink:#16181b; --sub:#5f625f; --line:#d6d1c4; --line2:#bdb7a8;
-  --y:#ffc21a; --y-soft:#fff0bf; --red:#cf2e1d; --red-soft:#f8dfd8; --green:#1d7349; --green-soft:#dcecdf;
-  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --g50:#f9fafb; --g100:#f2f4f6; --g200:#e5e8eb; --g300:#d1d6db; --g400:#b0b8c1; --g500:#8b95a1; --g600:#6b7684; --g700:#4e5968; --g800:#333d4b; --g900:#191f28;
+  --blue:#2272eb; --blue50:#e8f3ff; --red:#f04452; --red50:#ffeeee; --orange:#f18600; --orange50:#fff3e0; --green:#15a46e; --green50:#e5f8f0;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
-html,body{margin:0;height:100%;overflow:hidden;background:var(--paper);color:var(--ink);font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:anywhere}
-button,input,textarea{font:inherit;color:inherit}
-svg.i{width:22px;height:22px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.app{height:100vh;height:100dvh;max-width:520px;margin:0 auto;display:flex;flex-direction:column;background:var(--paper)}
-header{flex:none;background:var(--ink);color:#fff;padding:calc(8px + env(safe-area-inset-top)) 12px 0}
-.hrow{display:flex;align-items:center;gap:8px;height:36px}
-.back{flex:none;width:36px;height:36px;border:1px solid #3a3d42;border-radius:8px;background:none;color:#fff;display:grid;place-items:center;cursor:pointer;padding:0}
-.logo{display:flex;align-items:baseline;gap:7px;font-weight:800;font-size:18px;letter-spacing:-.4px}
-.logo i{font-style:normal;font-family:var(--mono);font-size:10.5px;font-weight:600;color:var(--y);letter-spacing:.6px}
-.hright{margin-left:auto;display:flex;gap:6px;align-items:center}
-.timer{font-family:var(--mono);font-size:12.5px;color:#d8d8d2;padding:0 2px;white-space:nowrap}
-.askbtn{display:flex;align-items:center;gap:5px;height:32px;padding:0 10px;border:none;border-radius:7px;background:var(--y);color:var(--ink);font-weight:800;font-size:13.5px;cursor:pointer;white-space:nowrap}
-.askbtn svg.i{width:17px;height:17px}
-.prog{display:flex;align-items:center;gap:8px;height:22px;margin-top:6px}
-.prog b{font-size:11.5px;font-weight:700;color:var(--y);white-space:nowrap}.prog b i{font-style:normal;font-family:var(--mono);font-weight:600;margin-right:4px}
-.bars{display:flex;gap:3px;flex:1}
-.bars i{flex:1;height:4px;background:#3a3d42}
-.bars i.on{background:var(--y)}.bars i.done{background:#8b8e88}
-.hazard{flex:none;height:6px;background:repeating-linear-gradient(-45deg,var(--y) 0 9px,var(--ink) 9px 18px);margin:0 -12px}
-header.noprog .hazard{margin-top:8px}
-main{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;padding:14px 16px 12px;overflow-y:auto}
-.grow{flex:1;min-height:0}
-.eyebrow{font-size:12.5px;font-weight:700;letter-spacing:0;color:var(--sub);display:flex;justify-content:space-between;align-items:center;gap:8px;flex:none;text-transform:uppercase}
-.eyebrow.red{color:var(--red)}
-h1{font-size:clamp(22px,3.5dvh,27px);line-height:1.28;margin:0;letter-spacing:-.7px;flex:none;font-weight:800}
-.lead{color:var(--sub);margin:0;line-height:1.5;font-size:15px;flex:none}
-.opts{display:flex;flex-direction:column;gap:8px;flex:1;min-height:0;justify-content:flex-end}
-.opt{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--card);border:1.5px solid var(--line2);border-radius:10px;padding:0 14px;font-size:18px;font-weight:800;cursor:pointer;min-height:clamp(58px,11.5dvh,104px);letter-spacing:-.3px}
-.opt .ib{flex:none;width:42px;height:42px;border-radius:8px;background:var(--paper);display:grid;place-items:center}
-.opt .ib svg.i{width:24px;height:24px}
-.opt .tx{flex:1}
-.opt small{display:block;font-weight:500;font-size:13.5px;color:var(--sub);margin-top:2px;letter-spacing:0}
-.opt .ch{flex:none;color:var(--line2)}
-.opt:active{border-color:var(--ink);background:#fff}
-.opt.red .ib{background:var(--red);color:#fff}
-.opt.ai{border-color:var(--ink);box-shadow:inset 4px 0 0 var(--y)}
-.btn{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;border:none;border-radius:10px;background:var(--ink);color:#fff;font-weight:800;font-size:17.5px;min-height:56px;padding:0 14px;cursor:pointer;text-decoration:none;text-align:center;letter-spacing:-.3px}
-.btn.y{background:var(--y);color:var(--ink)}
+html,body{margin:0;height:100%;overflow:hidden;background:#fff;color:var(--g900);font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:anywhere;letter-spacing:-.2px}
+button,input,textarea{font:inherit;color:inherit;letter-spacing:inherit}
+button{background:none;border:none;padding:0;cursor:pointer;text-align:left}
+svg.i{width:22px;height:22px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.app{height:100vh;height:100dvh;max-width:520px;margin:0 auto;display:flex;flex-direction:column;background:#fff}
+header{flex:none;padding-top:env(safe-area-inset-top);background:#fff}
+.nav{display:flex;align-items:center;height:52px;padding:0 8px 0 4px;gap:4px}
+.back{width:44px;height:44px;display:grid;place-items:center;color:var(--g900)}
+.back svg.i{width:26px;height:26px;stroke-width:2}
+.ttl{flex:1;min-width:0;padding-left:6px}
+.ttl b{display:block;font-size:17px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ttl small{display:block;font-size:12px;color:var(--g500);font-variant-numeric:tabular-nums;margin-top:1px}
+.ttl.logo b{font-size:19px;font-weight:800;letter-spacing:-.5px}
+.askbtn{height:36px;padding:0 12px;border-radius:10px;color:var(--blue);font-weight:600;font-size:15px}
+.askbtn:active{background:var(--blue50)}
+.bar{height:3px;background:var(--g100)}
+.bar i{display:block;height:100%;background:var(--blue);transition:width .3s}
+main{flex:1;min-height:0;display:flex;flex-direction:column;padding:20px 20px 12px;overflow-y:auto}
+.grow{flex:1;min-height:8px}
+h1{font-size:clamp(23px,3.6dvh,27px);line-height:1.36;margin:0;letter-spacing:-.7px;font-weight:700;flex:none}
+.lead{color:var(--g600);margin:8px 0 0;line-height:1.5;font-size:15.5px;flex:none}
+.pre{font-size:15px;font-weight:600;margin:0 0 6px;flex:none}
+.pre.duty{color:var(--red)}.pre.safety{color:var(--orange)}.pre.tip{color:var(--blue)}.pre.warn{color:var(--g700)}
+.list{margin:20px 0 0;flex:none}
+.row{display:flex;align-items:center;gap:14px;width:100%;min-height:clamp(64px,10dvh,84px);padding:8px 2px;border-bottom:1px solid var(--g100);font-size:17.5px;font-weight:600}
+.row:last-child{border-bottom:none}
+.row .ic{flex:none;width:42px;height:42px;border-radius:50%;background:var(--g100);color:var(--g700);display:grid;place-items:center}
+.row .ic.red{background:var(--red50);color:var(--red)}
+.row .ic.blue{background:var(--blue50);color:var(--blue)}
+.row .tx{flex:1}
+.row small{display:block;font-size:14px;font-weight:400;color:var(--g600);margin-top:3px}
+.row .ch{color:var(--g400);width:20px;height:20px}
+.row:active{background:var(--g50)}
+.btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;border-radius:14px;background:var(--blue);color:#fff;font-weight:600;font-size:17px;min-height:56px;padding:0 16px;text-decoration:none;text-align:center}
+.btn:active{filter:brightness(.94)}
 .btn.red{background:var(--red)}
-.btn.ghost{background:var(--card);color:var(--ink);border:1.5px solid var(--line2);font-size:16px;min-height:48px;font-weight:700}
-.btn.link{background:none;color:var(--sub);font-size:14.5px;font-weight:600;min-height:34px;text-decoration:underline;text-underline-offset:3px}
-.btn:disabled{opacity:.45}
-.btns{display:flex;flex-direction:column;gap:8px;flex:none}
-.row2{display:flex;gap:8px}.row2>*{flex:1}
-.row4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.row4 button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:56px;border:1.5px solid var(--line2);background:var(--card);border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;padding:4px 2px}
-.row4 button:first-child{background:var(--ink);color:#fff;border-color:var(--ink)}
-.sos{flex:1;min-height:150px;max-height:min(340px,42dvh);border:none;border-radius:12px;background:var(--red);color:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;padding:18px 20px;text-align:left;position:relative;overflow:hidden}
-.sos:after{content:"";position:absolute;right:0;top:0;bottom:0;width:14px;background:repeating-linear-gradient(-45deg,#fff 0 7px,transparent 7px 14px);opacity:.25}
-.sos .k{font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.8px;opacity:.85}
-.sos .t{font-size:clamp(28px,4.6dvh,36px);font-weight:900;letter-spacing:-1px;line-height:1.15}
-.sos .s{font-size:14px;font-weight:600;opacity:.92}
-.mini{display:flex;align-items:center;gap:10px;background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:11px 14px;font-size:14.5px;cursor:pointer;width:100%;text-align:left;flex:none}
-.mini b{margin-left:auto;font-size:14px;flex:none;text-decoration:underline;text-underline-offset:3px}
-.muted{color:var(--sub);font-size:12.5px;line-height:1.5;margin:0;flex:none}
-.task{flex:1;min-height:0;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:10px;position:relative}
-.tag{align-self:flex-start;font-size:12.5px;font-weight:800;letter-spacing:0;padding:4px 8px;border-radius:4px;border:1.5px solid var(--ink);display:flex;align-items:center;gap:5px}
-.tag svg.i{width:14px;height:14px}
-.tag.duty{background:var(--red);border-color:var(--red);color:#fff}.tag.safety{background:var(--y);border-color:var(--y)}
-.tag.tip{background:none}.tag.warn{background:var(--ink);color:#fff}
-.task h2{font-size:clamp(22px,3.8dvh,28px);line-height:1.3;margin:0;letter-spacing:-.6px;font-weight:800}
-.task p{margin:0;font-size:clamp(15px,2.6dvh,17.5px);line-height:1.55;color:#2d302e}
-.task .mid{margin:auto 0;display:flex;flex-direction:column;gap:10px}
-.law{font-size:13px;line-height:1.5;color:#3b3e3b;border-top:1.5px dashed var(--line2);padding-top:10px}
-.law b{color:var(--ink)}
-.count{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--ink)}
-.dots{display:flex;gap:3px;align-items:center}.dots i{width:12px;height:4px;background:var(--line)}.dots i.d{background:var(--ink)}.dots i.c{background:var(--y);width:20px}
-.steps4{flex:1;display:flex;flex-direction:column;gap:6px;justify-content:center;min-height:0}
-.s4{display:flex;align-items:center;gap:14px;background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:6px 14px;min-height:clamp(54px,10dvh,90px);font-size:18px;font-weight:800}
-.s4 .n{flex:none;width:34px;height:34px;border-radius:6px;background:var(--ink);color:var(--y);display:grid;place-items:center;font-family:var(--mono);font-size:16px}
-.s4 small{display:block;font-size:13px;font-weight:500;color:var(--sub)}
-.bigalert{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:12px;background:var(--red);color:#fff;border-radius:12px;padding:22px}
-.bigalert .k{font-family:var(--mono);font-size:12px;letter-spacing:.8px;opacity:.85}
-.bigalert h2{margin:0;font-size:clamp(26px,4.4dvh,32px);letter-spacing:-.8px;line-height:1.2}
-.bigalert p{margin:0;font-size:16.5px;line-height:1.6}
-.bigalert .sm{font-size:14px;opacity:.9}
-.shot{flex:1;min-height:0;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
-.shot.extra{border:2px dashed var(--ink)}
-.shead{display:flex;gap:12px;align-items:center;flex:none}
-.shead .ic{flex:none;width:46px;height:46px;border-radius:8px;background:var(--y);display:grid;place-items:center}
-.shead .ic svg.i{width:24px;height:24px}
-.shead h2{font-size:19px;margin:0;line-height:1.3;letter-spacing:-.4px}
-.shead p{margin:2px 0 0;font-size:14px;color:var(--sub);line-height:1.4}
-.cam{flex:1;min-height:110px;border:2px dashed var(--line2);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;background:var(--paper);font-weight:800;font-size:19px;text-align:center;padding:10px}
-.cam svg.i{width:40px;height:40px;stroke-width:1.6}
-.cam small{font-weight:500;font-size:13px;color:var(--sub)}
+.btn.sub{background:var(--g100);color:var(--g800)}
+.btn.lt{background:var(--blue50);color:var(--blue)}
+.btn.txt{background:none;color:var(--g600);font-size:15px;min-height:40px;font-weight:500}
+.btn:disabled{opacity:.4}
+.btns{display:flex;flex-direction:column;gap:8px;flex:none;margin-top:12px}
+.two{display:flex;gap:8px}.two>*{flex:1}
+.sosbtn{min-height:64px;font-size:19px;font-weight:700;border-radius:16px}
+.desc{font-size:clamp(16px,2.6dvh,17.5px);line-height:1.6;color:var(--g700);margin:12px 0 0;flex:none}
+.why{background:var(--g50);border-radius:14px;padding:14px 16px;font-size:14px;line-height:1.6;color:var(--g700);flex:none}
+.why b{color:var(--g900);font-weight:600}
+.why .h{display:block;font-size:13px;color:var(--g500);margin-bottom:4px;font-weight:500}
+.steps{margin:20px 0 0;padding:0;list-style:none;flex:none}
+.steps li{display:flex;gap:14px;align-items:flex-start;padding:12px 0;font-size:17.5px;font-weight:600;line-height:1.4}
+.steps .n{flex:none;width:28px;height:28px;border-radius:50%;background:var(--g900);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:700;margin-top:-1px}
+.steps small{display:block;font-size:14px;color:var(--g600);font-weight:400;margin-top:2px}
+.cam{flex:1;min-height:110px;border-radius:16px;background:var(--g100);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;font-weight:600;font-size:17px;color:var(--g800);margin-top:16px}
+.cam svg.i{width:36px;height:36px;color:var(--g600)}
+.cam small{font-weight:400;font-size:14px;color:var(--g600)}
 input[type=file]{display:none}
-.prev{flex:1;min-height:80px;position:relative;border-radius:8px;overflow:hidden;background:#111;cursor:zoom-in}
+.prev{flex:1;min-height:80px;position:relative;border-radius:14px;overflow:hidden;background:var(--g100);cursor:zoom-in;margin-top:14px}
 .prev img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
-.verdict{border-radius:8px;padding:10px 12px;font-size:14.5px;line-height:1.45;flex:none;border-left:5px solid}
-.verdict.ok{background:var(--green-soft);border-color:var(--green)}.verdict.warn{background:var(--y-soft);border-color:var(--y)}.verdict.retry{background:var(--red-soft);border-color:var(--red)}
-.verdict .vh{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:2px}
-.verdict .vh b{font-size:15.5px}
-.verdict .tags{font-size:12px;color:#4b4e4b;margin-top:4px;line-height:1.4}
-.src{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.4px;background:var(--ink);color:var(--y);padding:2px 6px;border-radius:3px;white-space:nowrap;flex:none}
-.src.dev{background:none;color:var(--sub);border:1px solid var(--line2)}
-.ailine{font-size:12px;color:var(--sub);flex:none;min-height:16px;display:flex;align-items:center;gap:6px}
-.spin{display:inline-block;width:15px;height:15px;border:2.5px solid var(--line2);border-top-color:var(--ink);border-radius:50%;animation:sp .8s linear infinite;flex:none}
+.res{margin-top:12px;flex:none;font-size:15px;line-height:1.55;color:var(--g700)}
+.res .rh{display:flex;align-items:center;gap:7px;margin-bottom:3px}
+.res .rh b{font-size:17px;color:var(--g900);font-weight:700}
+.res .dot{width:8px;height:8px;border-radius:50%;flex:none}
+.res.ok .dot{background:var(--green)}.res.warn .dot{background:var(--orange)}.res.retry .dot{background:var(--red)}
+.res.retry .rh b{color:var(--red)}
+.res .meta{font-size:13px;color:var(--g500);margin-top:4px;line-height:1.45}
+.by{font-size:13px;color:var(--g500);display:flex;align-items:center;gap:6px;flex:none}
+.spin{display:inline-block;width:16px;height:16px;border:2px solid var(--g200);border-top-color:var(--blue);border-radius:50%;animation:sp .8s linear infinite;flex:none}
 @keyframes sp{to{transform:rotate(360deg)}}
-.fields{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:none}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px 8px;flex:none}
 .field{flex:none}
-.field label{display:block;font-size:12.5px;font-weight:700;margin-bottom:4px;color:#3b3e3b}
-.field input{width:100%;font-size:16px;padding:11px 12px;border:1.5px solid var(--line);border-radius:8px;background:var(--card)}
-.field input.filled{border-color:var(--ink);background:var(--y-soft)}
-.hline{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;flex:none}
-.chipbtn{flex:none;display:flex;align-items:center;gap:5px;border:1.5px solid var(--ink);background:var(--card);border-radius:8px;padding:7px 10px;font-weight:800;font-size:13.5px;cursor:pointer;white-space:nowrap}
-.chipbtn svg.i{width:17px;height:17px}
-.locline{font-size:13.5px;background:var(--card);border:1.5px solid var(--line);border-radius:8px;padding:10px 12px;line-height:1.55;flex:none}
-.locline .m{font-family:var(--mono);font-size:12px}
-.calls{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:none}
-.call{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:1px;text-decoration:none;color:var(--ink);background:var(--card);border:1.5px solid var(--line2);border-radius:10px;min-height:clamp(60px,9.5dvh,80px);font-weight:800;font-size:17px;padding:0 14px;cursor:pointer}
-.call small{font-weight:500;font-size:12px;color:var(--sub);font-family:var(--mono)}
-.call.r{background:var(--red);color:#fff;border-color:var(--red)}.call.r small{color:#ffd9d2}
-.call.n{background:var(--ink);color:#fff;border-color:var(--ink)}.call.n small{color:#bdbdb5}
-.note{border-radius:8px;padding:11px 13px;font-size:14.5px;line-height:1.5;flex:none;border-left:5px solid}
-.note b{display:block;font-size:15.5px;margin-bottom:2px}
-.note.red{background:var(--red-soft);border-color:var(--red)}.note.blue{background:#e6e8ea;border-color:var(--ink)}.note.amber{background:var(--y-soft);border-color:var(--y)}.note.green{background:var(--green-soft);border-color:var(--green)}.note.gray{background:#e6e4dd;border-color:var(--line2)}
-.list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:0;flex:none;border-top:1.5px solid var(--line)}
-.list li{border-bottom:1.5px solid var(--line);padding:9px 2px;font-size:14.5px;line-height:1.4;display:flex;gap:10px;align-items:center}
-.list li .n{flex:none;font-family:var(--mono);font-size:11.5px;font-weight:600;color:var(--sub)}
-.rep{background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:2px 14px;flex:none}
-.rep div{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px;line-height:1.4}
-.rep div:last-child{border:none}
-.rep>div>span:first-child{flex:none;width:40px;color:var(--sub);font-size:12.5px;font-weight:700;padding-top:1px}
-.thumbs{display:flex;gap:6px;overflow-x:auto;flex:none}
-.thumbs img{width:64px;height:64px;object-fit:cover;border-radius:6px;flex:none;cursor:zoom-in}
-.dock{flex:none;background:var(--ink);padding:8px 10px calc(8px + env(safe-area-inset-bottom));display:grid;grid-template-columns:1fr 1fr 1.35fr;gap:6px}
-.dock a{display:flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;font-weight:800;border-radius:8px;min-height:46px;font-size:15.5px;white-space:nowrap;overflow:hidden;font-family:var(--mono);letter-spacing:-.2px}
-.dock a span{font-family:Pretendard,sans-serif;font-size:12.5px;font-weight:600;opacity:.85}
-.dock a svg.i{width:17px;height:17px}
-.dock .d1{background:var(--red);color:#fff}.dock .d2{background:#2c2f33;color:#fff}.dock .d3{background:var(--y);color:var(--ink);font-family:Pretendard,sans-serif;font-size:14.5px}
-.sheetbg{position:fixed;inset:0;z-index:50;background:rgba(14,15,16,.6);display:flex;align-items:flex-end;justify-content:center}
-.sheet{width:100%;max-width:520px;max-height:90dvh;overflow-y:auto;background:var(--paper);border-radius:14px 14px 0 0;padding:0 16px calc(16px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:10px}
-.sheet:before{content:"";display:block;height:6px;margin:0 -16px 6px;background:repeating-linear-gradient(-45deg,var(--y) 0 9px,var(--ink) 9px 18px);border-radius:14px 14px 0 0;flex:none}
-.sheet h2{margin:0;font-size:20px;letter-spacing:-.4px;display:flex;align-items:center;gap:8px}
-.chk{display:flex;gap:10px;align-items:center;font-size:15px;padding:7px 2px;border-bottom:1px solid var(--line)}
-.chk input{width:20px;height:20px;accent-color:var(--red);flex:none}
-textarea.talk{width:100%;min-height:96px;resize:none;border:1.5px solid var(--line2);border-radius:10px;background:var(--card);padding:12px;font-size:16px;line-height:1.5}
+.field label{display:block;font-size:13px;color:var(--g600);margin-bottom:6px}
+.field input{width:100%;font-size:16px;padding:13px 14px;border:none;border-radius:12px;background:var(--g100);outline:none}
+.field input:focus{box-shadow:inset 0 0 0 2px var(--blue)}
+.field input.filled{background:var(--blue50)}
+.hl{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex:none;margin-bottom:18px}
+.small{font-size:13px;color:var(--g500);line-height:1.5;margin:0;flex:none}
+.locline{font-size:14px;color:var(--g700);line-height:1.6;flex:none;margin-top:12px;font-variant-numeric:tabular-nums}
+.locline a,.kv a{color:var(--blue)}
+.relocate{color:var(--blue);font-size:14px;font-weight:500;margin-left:6px}
+.calls{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:none;margin-top:20px}
+.call{display:flex;flex-direction:column;justify-content:center;text-decoration:none;color:var(--g900);background:var(--g100);border-radius:14px;min-height:clamp(64px,10dvh,80px);font-weight:700;font-size:18px;padding:0 16px}
+.call small{font-weight:400;font-size:13px;color:var(--g600);margin-top:2px}
+.call.r{color:var(--red)}
+.call.b{background:var(--blue);color:#fff}.call.b small{color:#d6e6ff}
+.callout{border-radius:14px;padding:14px 16px;font-size:14.5px;line-height:1.55;color:var(--g700);flex:none;margin-top:16px;background:var(--g50)}
+.callout b{display:block;font-size:16px;color:var(--g900);margin-bottom:2px;font-weight:600}
+.callout.red b{color:var(--red)}
+.plain{margin:14px 0 0;padding:0;list-style:none;flex:none}
+.plain li{padding:6px 0 6px 14px;position:relative;font-size:15px;color:var(--g700);line-height:1.5}
+.plain li:before{content:"";position:absolute;left:2px;top:15px;width:4px;height:4px;border-radius:50%;background:var(--g400)}
+.kv{margin-top:18px;flex:none}
+.kv div{display:flex;gap:14px;padding:9px 0;font-size:15px;line-height:1.5;border-bottom:1px solid var(--g100)}
+.kv div:last-child{border:none}
+.kv span{flex:none;width:44px;color:var(--g500)}
+.kv .v{flex:1;min-width:0}
+.thumbs{display:flex;gap:6px;overflow-x:auto;flex:none;margin-top:8px}
+.thumbs img{width:60px;height:60px;object-fit:cover;border-radius:10px;flex:none;cursor:zoom-in}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.tiles button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:60px;border-radius:14px;background:var(--g100);font-size:13px;font-weight:500;color:var(--g800);text-align:center}
+.tiles svg.i{width:20px;height:20px;color:var(--g700)}
+.dock{flex:none;background:#fff;border-top:1px solid var(--g100);padding:8px 12px calc(8px + env(safe-area-inset-bottom));display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:8px}
+.dock a{display:flex;align-items:center;justify-content:center;gap:5px;text-decoration:none;font-weight:700;border-radius:12px;min-height:46px;font-size:16px;white-space:nowrap;overflow:hidden;background:var(--g100);color:var(--g900)}
+.dock a span{font-weight:400;font-size:13px;color:var(--g600)}
+.dock .d1{color:var(--red)}
+.sheetbg{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center}
+.sheet{width:100%;max-width:520px;max-height:90dvh;overflow-y:auto;background:#fff;border-radius:22px 22px 0 0;padding:10px 20px calc(16px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:12px}
+.sheet:before{content:"";display:block;width:40px;height:4px;border-radius:2px;background:var(--g200);margin:0 auto 6px;flex:none}
+.sheet h2{margin:0;font-size:21px;font-weight:700;letter-spacing:-.5px}
+.sheet .lead{margin:0}
+.chk{display:flex;gap:12px;align-items:center;font-size:15.5px;padding:10px 0;border-bottom:1px solid var(--g100)}
+.chk input{width:22px;height:22px;accent-color:var(--red);flex:none}
+textarea.talk{width:100%;min-height:96px;resize:none;border:none;border-radius:14px;background:var(--g100);padding:14px;font-size:16px;line-height:1.5;outline:none}
+textarea.talk:focus{box-shadow:inset 0 0 0 2px var(--blue)}
 .talkrow{display:flex;gap:8px}
-.mic{flex:none;width:56px;border:none;border-radius:10px;background:var(--ink);color:#fff;display:grid;place-items:center;cursor:pointer}
-.mic.on{background:var(--red);animation:pulse 1.2s infinite}
+.mic{flex:none;width:56px;border-radius:14px;background:var(--blue50);color:var(--blue);display:grid;place-items:center}
+.mic.on{background:var(--red);color:#fff;animation:pulse 1.2s infinite}
 @keyframes pulse{50%{opacity:.7}}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
-.chips button{border:1.5px solid var(--line2);background:var(--card);border-radius:999px;padding:7px 12px;font-size:13.5px;cursor:pointer;text-align:left}
-.ans{background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;font-size:15px;line-height:1.55}
-.ans .q{font-size:13px;color:var(--sub);margin-bottom:4px}
-.ans .lw{font-size:12.5px;font-weight:700;color:var(--sub);margin-top:6px}
-.ans a.btn{margin-top:8px;min-height:44px;font-size:15.5px}
-.understood{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;background:var(--card);border:1.5px solid var(--ink);border-radius:10px;padding:12px 14px;font-size:15px}
-.understood span{color:var(--sub);font-size:13px;font-weight:700;padding-top:1px}
-.understood .q{color:var(--red);font-weight:700}
-.doc{background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;font-size:14.5px;line-height:1.65;white-space:pre-wrap}
-.doc h3{margin:0 0 6px;font-size:13px;color:var(--sub);font-weight:800}
-.lb{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;gap:8px;color:#fff;font-size:13px}
-.lb img{max-width:100%;max-height:85dvh;border-radius:6px}
-.toast{position:fixed;left:50%;bottom:86px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:8px;font-size:14px;opacity:0;transition:.25s;pointer-events:none;z-index:70;max-width:90%;text-align:center;border-left:4px solid var(--y)}
-.toast.on{opacity:1}
-.relocate{border:1px solid var(--line2);background:var(--paper);border-radius:6px;font-size:12px;padding:2px 8px;margin-left:4px;cursor:pointer}
-@media (max-height:690px){main{padding-top:10px;gap:8px}.h7{display:none}.rep div{font-size:13.5px}.rep{padding:0 12px}.thumbs img{width:48px!important;height:48px!important}.row4 button{min-height:50px}.task{padding:14px;gap:8px}.task p{font-size:15px}.law{font-size:12.5px;padding-top:8px}.btn{min-height:50px}.btn.ghost{min-height:44px}.dock a{min-height:42px}.list li{padding:7px 2px;font-size:14px}.rep div{padding:5px 0}.thumbs img{width:56px;height:56px}.call{min-height:56px}.note b{margin-bottom:0}.note{padding:9px 12px;font-size:14px}}
-@media (max-height:600px){main{gap:6px;padding:8px 14px 8px}.eyebrow.hs{display:none}h1{font-size:19.5px}.lead{font-size:14px}
- .field label{font-size:12px;margin-bottom:2px}.field input{padding:8px 10px;font-size:15px}.locline{padding:7px 10px;font-size:12.5px}
- .call{min-height:50px;font-size:15.5px}.note{padding:7px 10px;font-size:13px}.note b{font-size:14px}.list li{padding:5px 2px;font-size:13px}
- .rep div{padding:4px 0;font-size:13px}.thumbs img{width:44px;height:44px}.btn{min-height:46px;font-size:16.5px}.btn.ghost{min-height:42px;font-size:15px}
- .opt{font-size:17px}.opt .ib{width:36px;height:36px}.task h2{font-size:20px}.task p{font-size:14.5px}.law{font-size:12px}.dock{padding-top:6px}.dock a{min-height:40px}
- .row4 button{min-height:42px;font-size:12px}.rep div{padding:3px 0!important;line-height:1.3}.thumbs img{width:40px!important;height:40px!important}.row4 svg.i{width:18px;height:18px}
- .sos{min-height:120px;padding:14px 16px}.bigalert{padding:14px;gap:8px}.s4{min-height:46px;font-size:16px}.verdict{font-size:13.5px;padding:7px 10px}.chipbtn{padding:5px 8px}}
+.chips button{background:var(--g100);border-radius:999px;padding:8px 13px;font-size:14px;color:var(--g800)}
+.ans{background:var(--g50);border-radius:14px;padding:14px 16px;font-size:15.5px;line-height:1.6}
+.ans .q{font-size:14px;color:var(--g600);margin-bottom:6px}
+.ans .lw{font-size:13px;color:var(--g500);margin-top:6px}
+.ans a.btn{margin-top:10px;min-height:46px;font-size:15.5px}
+.kv.box{background:var(--g50);border-radius:14px;padding:4px 16px;margin:0}
+.kv .q{color:var(--orange)}
+.doc{background:var(--g50);border-radius:14px;padding:14px 16px;font-size:15px;line-height:1.7;white-space:pre-wrap;color:var(--g800)}
+.doc h3{margin:0 0 6px;font-size:14px;color:var(--g500);font-weight:500}
+.lb{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;gap:10px;color:#fff;font-size:13px}
+.lb img{max-width:100%;max-height:85dvh;border-radius:8px}
+.toast{position:fixed;left:50%;bottom:88px;transform:translate(-50%,8px);background:rgba(25,31,40,.92);color:#fff;padding:12px 18px;border-radius:14px;font-size:14.5px;opacity:0;transition:.25s;pointer-events:none;z-index:70;max-width:88%;text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (max-height:690px){main{padding-top:14px}.list{margin-top:12px}.row{min-height:58px}.desc{font-size:15.5px}.why{padding:11px 14px;font-size:13.5px}.btn{min-height:50px}.sosbtn{min-height:56px}.dock a{min-height:42px}.steps li{padding:8px 0}.kv{margin-top:12px}.kv div{padding:6px 0;font-size:14px}.call{min-height:56px}.calls{margin-top:14px}.callout{margin-top:10px;padding:11px 14px;font-size:14px}.plain li{padding:4px 0 4px 14px;font-size:14px}.plain li:before{top:13px}.thumbs img{width:48px;height:48px}.tiles button{min-height:52px}.hl{margin-bottom:12px}.field input{padding:11px 12px}}
+@media (max-height:600px){main{padding:10px 18px 8px}h1{font-size:20px}.lead{font-size:14px;margin-top:4px}.row{min-height:50px;font-size:16.5px}.row .ic{width:36px;height:36px}.row small{font-size:13px}
+ .desc{font-size:14.5px;margin-top:8px}.why{font-size:12.5px;padding:9px 12px}.btn{min-height:46px;font-size:16px}.sosbtn{min-height:52px}.btns{margin-top:8px}
+ .steps{margin-top:10px}.steps li{padding:5px 0;font-size:16px}.field label{font-size:12px;margin-bottom:3px}.field input{padding:9px 11px;font-size:15px}.fields{gap:6px}.locline{font-size:12.5px;margin-top:8px}
+ .call{min-height:48px;font-size:16px}.calls{margin-top:10px}.callout{padding:8px 12px;font-size:13px;margin-top:8px}.callout b{font-size:14.5px}.plain{margin-top:6px}.plain li{padding:2px 0 2px 14px;font-size:13px}.plain li:before{top:10px}
+ .kv{margin-top:8px}.kv div{padding:4px 0;font-size:13px}.thumbs img{width:40px;height:40px}.tiles button{min-height:46px;font-size:12px}.dock a{min-height:40px}.res{font-size:13.5px;margin-top:8px}.res .rh b{font-size:15.5px}.res .meta{font-size:12px}.cam{margin-top:10px}.prev{margin-top:8px}.hl{margin-bottom:8px}}
 @media print{header,.dock,.btns{display:none!important}html,body{overflow:visible;height:auto}.app{height:auto}main{overflow:visible}}
 </style>
 </head>
 <body>
 <div class="app">
-  <header id="hdr" class="noprog">
-    <div class="hrow">
+  <header>
+    <div class="nav">
       <button class="back" id="back" aria-label="이전" hidden><svg class="i" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
-      <div class="logo">사고내비<i>SAGO·NAVI</i></div>
-      <div class="hright"><span class="timer" id="timer" hidden></span><button class="askbtn" data-a="ask" aria-label="AI에게 물어보기"><svg class="i" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9.5h8M8 12.5h5"/></svg>물어보기</button></div>
+      <div class="ttl" id="ttl"><b id="ttlB">사고내비</b><small id="ttlS" hidden></small></div>
+      <button class="askbtn" data-a="ask">AI에게 질문</button>
     </div>
-    <div class="prog" id="prog" hidden><b id="progTxt"></b><div class="bars" id="bars"></div></div>
-    <div class="hazard"></div>
+    <div class="bar" id="bar" hidden><i id="barI"></i></div>
   </header>
   <main id="view"></main>
   <nav class="dock">
-    <a class="d1" href="tel:119">119<span>구급</span></a>
-    <a class="d2" href="tel:112">112<span>경찰</span></a>
+    <a class="d1" href="tel:119">119 <span>구급</span></a>
+    <a class="d2" href="tel:112">112 <span>경찰</span></a>
     <a class="d3" id="dockIns" href="#">내 보험사</a>
   </nav>
 </div>
 <div id="sheet" class="sheetbg" hidden></div>
-<div id="lb" class="lb" hidden><img id="lbImg" alt=""><div>기기 AI가 찾은 물체를 상자로 표시했어요 · 눌러서 닫기</div></div>
+<div id="lb" class="lb" hidden><img id="lbImg" alt=""><div>휴대폰 AI가 찾은 물체를 상자로 표시했어요 · 눌러서 닫기</div></div>
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0/dist/tf.min.js" defer></script>
@@ -239,11 +205,9 @@ const P={
   img:'<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M21 16l-5-5-9 9"/>',
   phone:'<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"/>',
   mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>',
-  chat:'<path d="M4 5h16v11H9l-5 4z"/><path d="M8 9.5h8M8 12.5h5"/>',
   doc:'<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 12h7M9 16h7"/>',
   share:'<path d="M12 3v12M8 7l4-4 4 4"/><path d="M5 12v8h14v-8"/>',
   print:'<path d="M7 9V3h10v6"/><rect x="3" y="9" width="18" height="8" rx="1"/><path d="M7 14h10v7H7z"/>',
-  law:'<path d="M12 3v18M7 21h10M5 7h14"/><path d="M5 7l-3 6a3 3 0 0 0 6 0zM19 7l-3 6a3 3 0 0 0 6 0z"/>',
   alert:'<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18h.01"/>',
   list:'<path d="M4 6h16M4 12h16M4 18h10"/>',
   redo:'<path d="M4 12a8 8 0 1 0 2.3-5.7L4 8.5"/><path d="M4 3.5v5h5"/>',
@@ -251,11 +215,8 @@ const P={
   plate:'<rect x="2" y="7" width="20" height="10" rx="2"/><path d="M6 12h2M10 12h8"/>',
   cross:'<path d="M4 5h16M4 19h16"/><path d="M6 8v8M10 8v8M14 8v8M18 8v8"/>',
   trace:'<circle cx="7" cy="15" r="1.5"/><circle cx="12" cy="11" r="1"/><circle cx="17" cy="14" r="2"/><path d="M3 20h18"/>',
-  pin:'<path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
-  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
   chev:'<path d="M9 5l7 7-7 7"/>',
-  send:'<path d="M4 12l16-8-6 16-3-7z"/>',
-  pen:'<path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/>'
+  eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'
 };
 const ic=(n,c)=>`<svg class="i ${c||""}" viewBox="0 0 24 24" aria-hidden="true">${P[n]||""}</svg>`;
 
@@ -265,9 +226,9 @@ const S={screen:"home",hist:[],started:null,injured:null,place:null,type:null,ro
   auto:false,aiSummary:"",qa:[],filled:new Set()};
 
 const GROUP={injured:0,call119:0,place:0,bitbox:0,type:1,role:1,actions:2,photos:3,info:4,wait:5,report:6};
-const GNAME=["안전 확인","사고 유형","지금 할 일","사진","기록","연락","리포트"];
+const GNAME=["안전 확인","사고 유형","지금 할 일","사진 남기기","상대 정보","연락","사고 기록"];
 const FAULT12=["신호·지시 위반","중앙선 침범","제한속도보다 20km/h 넘게 과속","앞지르기 방법·금지 위반","철길건널목 통과방법 위반","횡단보도 보행자 보호의무 위반","무면허 운전","음주·약물 운전","보도 침범·보도 횡단방법 위반","승객 추락방지의무 위반","어린이보호구역 안전운전의무 위반(어린이 상해)","화물 고정조치 위반(화물 낙하)"];
-const TAG={duty:"법적 의무",safety:"안전",tip:"권장",warn:"주의"};
+const PRE={duty:"꼭 해야 해요 · 법적 의무",safety:"안전이 먼저예요",tip:"하면 좋아요",warn:"하지 마세요"};
 const TNAME={car:"차와 차",person:"차와 사람",single:"혼자 사고",parked:"주차된 차·물건"};
 const PNAME={highway:"고속도로",road:"일반 도로",parking:"주차장·골목"};
 const INAME={yes:"있음",unknown:"확인 필요",no:"없음"};
@@ -275,7 +236,7 @@ const RNAME={hit:"내가 부딪힘",gothit:"내가 받힘",unknown:"모름"};
 
 /* ---------- GPT (서버 중계) ---------- */
 const AI_URL="https://sago-navi-ai.netlify.app/api/ai";
-let gptState="idle"; // idle · ready · off
+let gptState="idle";
 function gptPing(){fetch(AI_URL,{cache:"no-store"}).then(r=>r.json()).then(j=>{gptState=j.ready?"ready":"off";aiLine()}).catch(()=>{gptState="off";aiLine()})}
 async function gpt(task,data,ms){
   const c=new AbortController();const t=setTimeout(()=>c.abort(),ms||20000);
@@ -295,13 +256,13 @@ function buildActions(){
   if(inj) add("police","duty","경찰(112)에 신고", t==="person"?"보행자·자전거·킥보드 사고는 경미해 보여도 신고하세요. 어린이라면 보호자에게도 꼭 연락하세요.":"상대가 ‘괜찮다’고 해도 신고하세요. 나중에 통증을 호소하는 경우가 많아요.","<b>도로교통법 제54조 제2항</b> 사람이 다친 사고는 경찰 신고 의무가 있어요.");
   else if(t==="person") add("police","tip","다친 데가 없어도 112 신고","보행자·자전거·킥보드 사고는 나중에 통증이 생기는 경우가 많아요. 신고해 두면 기록이 남아요.","나중에 부상이 확인되면 신고 의무 위반이나 도주 문제가 될 수 있어요(<b>도로교통법 제54조</b>).");
   if(t==="parked") add("parked","duty","차 주인에게 내 연락처 남기기","차에 적힌 번호로 연락하고, 안 되면 이름·전화번호·차량번호를 메모로 남긴 뒤 사진으로 찍어 두세요.","<b>도로교통법 제54조 제1항 제2호</b> 인적 사항 제공 의무. 어기면 <b>제156조 제10호</b>(20만 원 이하 벌금이나 구류 또는 과료).");
-  if(!hw) add("photo1","tip","차를 옮기기 전에 위치 사진부터", t==="car"?"두 차의 위치와 차선이 보이게 멀리서 앞·뒤로 찍어요.":"차 위치와 주변이 보이게 멀리서 찍어요.","과실을 따질 때 차량 위치가 핵심 증거예요. 다음 단계에서 AI가 사진을 판독해 줘요.");
+  if(!hw) add("photo1","tip","차를 옮기기 전에 위치 사진부터", t==="car"?"두 차의 위치와 차선이 보이게 멀리서 앞·뒤로 찍어요.":"차 위치와 주변이 보이게 멀리서 찍어요.","과실을 따질 때 차량 위치가 핵심 증거예요. 다음 단계에서 AI가 사진을 확인해 줘요.");
   if(!inj&&!hw&&t!=="parked") add("move","tip","사진을 찍었으면 차를 안전한 곳으로","차가 움직이면 갓길이나 길 가장자리로 옮겨 2차 사고와 정체를 막으세요.","<b>도로교통법 제54조 제2항 단서</b> 물건만 부서졌고 위험 방지·소통 조치를 했다면 경찰 신고 의무가 없어요.");
-  if(t==="car"||t==="person") add("exchange","duty","상대방과 연락처 주고받기","이름·연락처·차량번호·보험사. 다음 단계에서 말로 불러 주면 AI가 받아 적어요.","<b>도로교통법 제54조 제1항 제2호</b> 피해자에게 인적 사항을 알려 줘야 해요.");
+  if(t==="car"||t==="person") add("exchange","duty","상대방과 연락처 주고받기","이름·연락처·차량번호·보험사를 주고받으세요. 뒤에서 상대가 불러 주는 대로 AI가 받아 적어요.","<b>도로교통법 제54조 제1항 제2호</b> 피해자에게 인적 사항을 알려 줘야 해요.");
   if(t==="single") add("road","tip","도로 결함 때문이면 흔적 남기기","포트홀·낙하물·고장 난 신호등이라면 위치를 찍고 도로관리청(시·군·구청, 국토관리사무소)에 알리세요.","<b>국가배상법 제5조</b> 도로 관리 잘못으로 생긴 손해는 배상을 청구할 수 있어요.");
   add("blackbox","tip","블랙박스 영상 지키기","충격 녹화 영상을 확인하고, 덮어쓰기가 걱정되면 메모리카드를 빼 두세요. 목격자 연락처도 받아 두세요.","과실 다툼에서 가장 강한 증거예요.");
   add("ins","tip","내 보험사에 사고 접수","내가 피해자여도 접수해 두면 처리가 빨라요. 접수번호를 받아 두세요.","자동차보험 약관상 사고가 나면 보험회사에 알려야 해요.");
-  add("dont","warn","현장에서 하지 말 것","현금으로 바로 합의하기, 각서·확인서 서명, ‘다 제 잘못’이라고 단정하기, 상대와 언쟁하기.","과실비율은 보험사가 기준에 따라 정해요. 현장에서 쓴 각서는 나중에 불리한 증거가 될 수 있어요.");
+  add("dont","warn","현장에서 바로 합의하지 마세요","현금으로 바로 합의하기, 각서·확인서 서명, ‘다 제 잘못’이라고 단정하기, 상대와 언쟁하기는 피하세요.","과실비율은 보험사가 기준에 따라 정해요. 현장에서 쓴 각서는 나중에 불리한 증거가 될 수 있어요.");
   return A;
 }
 
@@ -309,45 +270,42 @@ function buildActions(){
 function baseShots(){
   const L=[];const add=(id,ic,t,d,kind,opt)=>L.push({id,ic,t,d,kind,opt:!!opt});
   if(S.type==="car"){
-    add("wide","hw","두 차가 함께 나온 전체 사진","3~5걸음 물러나서 두 차와 차선이 한 화면에","wide2");
-    add("lane","lane","뒤쪽에서 본 차선·방향","어느 차선에서 어디로 가던 중이었는지","wide1");
-    add("mydmg","car","내 차 부딪힌 곳","부딪힌 부위가 화면 대부분을 차지하게","close");
-    add("othdmg","car","상대 차 부딪힌 곳","긁힌 높이와 방향이 보이게","close");
-    add("plate","plate","상대 차 번호판","번호 글자가 또렷하게 · AI가 읽어서 적어 줘요","plate");
-    add("signal","sig","신호등·표지판·노면 표시","근처에 있다면 함께","signal",true);
-    add("trace","trace","파편·바닥 흔적","차를 옮기기 전, 떨어진 위치","any",true);
+    add("wide","hw","두 차가 함께 나오게","3~5걸음 물러나서 두 차와 차선이 한 화면에 들어오게 찍어 주세요.","wide2");
+    add("lane","lane","뒤쪽에서 본 차선","어느 차선에서 어디로 가던 중이었는지 보이게요.","wide1");
+    add("mydmg","car","내 차 부딪힌 곳","부딪힌 부위가 화면 대부분을 차지하게요.","close");
+    add("othdmg","car","상대 차 부딪힌 곳","긁힌 높이와 방향이 보이게요.","close");
+    add("plate","plate","상대 차 번호판","글자가 또렷하게 찍으면 AI가 읽어서 적어 둬요.","plate");
+    add("signal","sig","신호등·표지판","근처에 있다면 함께 찍어 주세요.","signal",true);
+    add("trace","trace","파편·바닥 흔적","차를 옮기기 전, 떨어진 위치를요.","any",true);
   } else if(S.type==="person"){
-    add("wide","hw","사고 지점 전체","차·횡단보도·신호등이 함께 나오게","wide1");
-    add("cross","cross","횡단보도·신호등·정지선","보행자 신호와 차량 신호가 보이게","signal");
-    add("mydmg","car","내 차 부딪힌 부위","범퍼·보닛 높이가 보이게","close");
-    add("plate","plate","내 차 번호판","경찰·보험 접수용","plate");
-    add("scene","walk","보행자·자전거가 있던 위치","구호를 마친 뒤, 위치만","person",true);
+    add("wide","hw","사고 지점 전체","차·횡단보도·신호등이 함께 나오게요.","wide1");
+    add("cross","cross","횡단보도·신호등","보행자 신호와 차량 신호가 보이게요.","signal");
+    add("mydmg","car","내 차 부딪힌 부위","범퍼·보닛 높이가 보이게요.","close");
+    add("plate","plate","내 차 번호판","경찰·보험 접수에 필요해요.","plate");
+    add("scene","walk","보행자가 있던 위치","구호를 마친 뒤, 위치만 남겨 주세요.","person",true);
   } else if(S.type==="single"){
-    add("wide","hw","차와 주변 도로 전체","어디서 어떻게 멈췄는지","wide1");
-    add("mydmg","car","내 차 파손 부위","부딪힌 부위 가까이","close");
-    add("cause","alert","사고 원인","포트홀·낙하물·부서진 시설물","any");
-    add("signal","sig","주변 표지판·도로 표시","주의 표지판이 있었는지","signal",true);
+    add("wide","hw","차와 주변 도로","어디서 어떻게 멈췄는지 보이게요.","wide1");
+    add("mydmg","car","내 차 파손 부위","부딪힌 부위 가까이에서요.","close");
+    add("cause","alert","사고 원인","포트홀·낙하물·부서진 시설물을요.","any");
+    add("signal","sig","주변 표지판","주의 표지판이 있었는지요.","signal",true);
   } else {
-    add("othdmg","car","상대 차 부딪힌 곳","파손 부위 가까이","close");
-    add("plate","plate","상대 차 번호판","번호가 또렷하게 · AI가 읽어서 적어 줘요","plate");
-    add("wide","park","주차 위치 전체","두 차의 위치 관계가 보이게","wide1");
-    add("note","doc","남긴 연락처 메모","차 주인에게 연락처를 남긴 증거","any");
+    add("othdmg","car","상대 차 부딪힌 곳","파손 부위 가까이에서요.","close");
+    add("plate","plate","상대 차 번호판","글자가 또렷하게 찍으면 AI가 읽어서 적어 둬요.","plate");
+    add("wide","park","주차 위치 전체","두 차의 위치 관계가 보이게요.","wide1");
+    add("note","doc","남긴 연락처 메모","차 주인에게 연락처를 남긴 증거예요.","any");
   }
   return L;
 }
 function buildShots(){const out=[];for(const s of baseShots()){out.push(s);for(const e of S.extra)if(e.parent===s.id)out.push(e)}return out}
 
-/* ---------- 기기 안 AI (COCO-SSD) ---------- */
+/* ---------- 휴대폰 안 AI (COCO-SSD) ---------- */
 let model=null,modelState="idle";
 function loadModel(){
   if(model||modelState==="loading")return;modelState="loading";aiLine();
   const wait=()=>new Promise((res,rej)=>{let n=0;const t=setInterval(()=>{if(window.cocoSsd&&window.tf){clearInterval(t);res()}else if(++n>200){clearInterval(t);rej()}},100)});
   wait().then(()=>cocoSsd.load({base:"lite_mobilenet_v2"})).then(m=>{model=m;modelState="ready";aiLine()}).catch(()=>{modelState="fail";aiLine()});
 }
-function aiLine(){const el=$("#aiLine");if(!el)return;
-  const dev={idle:"",loading:'<span class="spin"></span>기기 AI 준비 중',ready:"기기 AI 준비됨",fail:"기기 AI 없음 · 흔들림·밝기만 검사"}[modelState];
-  const g=gptState==="ready"?" · GPT 판독 켜짐(축소 사진 전송, 저장 안 함)":gptState==="off"?" · GPT 연결 안 됨":"";
-  el.innerHTML=dev+g}
+function aiLine(){}
 const VEH=["car","truck","bus","motorcycle"];
 const KO={car:"승용차",truck:"트럭",bus:"버스",motorcycle:"오토바이",bicycle:"자전거",person:"사람","traffic light":"신호등","stop sign":"정지 표지판"};
 function fileToImage(f){return new Promise((res,rej)=>{const u=URL.createObjectURL(f);const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=u})}
@@ -376,7 +334,7 @@ async function analyze(shot,file){
     if(k==="wide2"||k==="wide1"){
       if(!veh.length){st="retry";msg.push("차가 보이지 않아요. 차가 화면 안에 들어오게 다시 찍어 주세요.")}
       else if(maxV>0.5){st="retry";msg.push("너무 가까워요. 3~5걸음 물러나서 차 전체와 차선이 나오게 찍어 주세요.")}
-      else if(k==="wide2"&&veh.length<2){warn("차가 1대만 보여요. 상대 차도 나오게 다른 각도에서 1장 더 찍어 주세요.");addExtra(shot.parent||shot.id,{id:(shot.parent||shot.id)+"_b",ic:"cam",t:"두 차가 함께 나온 다른 각도",d:"옆이나 대각선에서 두 차가 다 나오게",kind:"wide2"})}
+      else if(k==="wide2"&&veh.length<2){warn("차가 1대만 보여요. 상대 차도 나오게 다른 각도에서 1장 더 찍어 주세요.");addExtra(shot.parent||shot.id,{id:(shot.parent||shot.id)+"_b",ic:"cam",t:"다른 각도에서 두 차 함께",d:"옆이나 대각선에서 두 차가 다 나오게 찍어 주세요.",kind:"wide2"})}
     } else if(k==="close"){ if(veh.length&&maxV<0.2)warn("파손 부위가 작게 나왔어요. 한두 걸음 다가가서 크게 찍어 주세요."); }
     else if(k==="signal"){ if(!sig.length)warn("신호등·표지판을 찾지 못했어요. 있다면 함께 나오게 다시 찍고, 없으면 넘어가도 돼요."); }
     else if(k==="person"){ if(!ppl.length&&!veh.length)warn("위치를 알 만한 표시가 잘 안 보여요. 차와 함께 나오게 찍어 주세요."); }
@@ -385,14 +343,14 @@ async function analyze(shot,file){
   if(st==="ok")msg.unshift({wide2:"두 차의 위치가 잘 보여요.",wide1:"전체 상황이 잘 보여요.",close:"파손 부위가 잘 보여요.",plate:"번호판 글자가 읽히는지 한 번만 확인해 주세요.",signal:"신호·표지가 함께 찍혔어요.",person:"위치가 기록됐어요.",any:"기록됐어요."}[shot.kind]||"좋아요.");
   const send=downscale(c,shot.kind==="plate"?1024:768).toDataURL("image/jpeg",.72);
   const out=document.createElement("canvas");out.width=c.width;out.height=c.height;const g=out.getContext("2d");g.drawImage(c,0,0);
-  const fs=Math.max(16,c.width/30);g.lineWidth=Math.max(3,c.width/200);g.font=`bold ${fs}px sans-serif`;
-  for(const o of objs){const col=VEH.includes(o.cls)?"#ffc21a":o.cls==="person"?"#ff6a4d":"#7fd1ae";g.strokeStyle=col;g.strokeRect(o.box[0],o.box[1],o.box[2],o.box[3]);const lab=(KO[o.cls]||o.cls)+" "+Math.round(o.score*100)+"%";const tw=g.measureText(lab).width+10;const lh=fs+8;g.fillStyle=col;g.fillRect(o.box[0],Math.max(0,o.box[1]-lh),tw,lh);g.fillStyle="#16181b";g.fillText(lab,o.box[0]+5,Math.max(fs,o.box[1]-6))}
+  const fs=Math.max(16,c.width/30);g.lineWidth=Math.max(3,c.width/200);g.font=`600 ${fs}px Pretendard, sans-serif`;
+  for(const o of objs){const col=VEH.includes(o.cls)?"#2272eb":o.cls==="person"?"#f18600":"#15a46e";g.strokeStyle=col;g.strokeRect(o.box[0],o.box[1],o.box[2],o.box[3]);const lab=(KO[o.cls]||o.cls)+" "+Math.round(o.score*100)+"%";const tw=g.measureText(lab).width+12;const lh=fs+10;g.fillStyle=col;g.fillRect(o.box[0],Math.max(0,o.box[1]-lh),tw,lh);g.fillStyle="#fff";g.fillText(lab,o.box[0]+6,Math.max(fs+2,o.box[1]-7))}
   const cnt={};objs.forEach(o=>{const k=KO[o.cls]||o.cls;cnt[k]=(cnt[k]||0)+1});
   return {status:st,msg,tags:Object.entries(cnt).map(([k,v])=>k+" "+v),q,blur,url:out.toDataURL("image/jpeg",.72),send};
 }
-function addExtra(parent,e){if(S.extra.some(x=>x.id===e.id))return;S.extra.push(Object.assign({parent,opt:false,isExtra:true},e));toast("AI가 사진 1장을 더 요청했어요")}
+function addExtra(parent,e){if(S.extra.some(x=>x.id===e.id))return;S.extra.push(Object.assign({parent,opt:false,isExtra:true},e));toast("AI가 사진을 한 장 더 요청했어요")}
 
-/* GPT 사진 판독: 기기 AI 결과를 받은 뒤 한 번 더 */
+/* GPT 사진 판독 */
 async function gptPhoto(shot,p){
   if(gptState==="off"||!p.send)return;
   p.gpt="busy";
@@ -400,28 +358,28 @@ async function gptPhoto(shot,p){
     const r=await gpt("photo",{title:shot.t,hint:shot.d,ctx:ctxText(),local:p.tags.join(", ")||"없음",image:p.send,hi:shot.kind==="plate"},25000);
     p.gpt=r;
     if(!p.blur)p.status=r.status;
-    if(r.plate&&shot.kind==="plate"&&S.type!=="person"){const pl=r.plate.replace(/\s/g,"");if(!S.other.plate){S.other.plate=pl;S.filled.add("plate");toast(`번호판 ‘${pl}’을 읽어 차량번호 칸에 적었어요`)}}
+    if(r.plate&&shot.kind==="plate"&&S.type!=="person"){const pl=r.plate.replace(/\s/g,"");if(!S.other.plate){S.other.plate=pl;S.filled.add("plate");toast(`번호판 ${pl}을 읽어서 적어 뒀어요`)}}
     if(r.extra_title&&r.status!=="ok")addExtra(shot.parent||shot.id,{id:(shot.parent||shot.id)+"_ai",ic:"cam",t:r.extra_title,d:r.extra_hint||"",kind:"any"});
   }catch(e){p.gpt="fail"}
   if(S.screen==="photos")render();
 }
 
-/* ---------- 말 → 글 (음성 인식) ---------- */
+/* ---------- 음성 입력 ---------- */
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 let rec=null;
 function micToggle(btn,ta){
-  if(!SR){toast("이 브라우저는 음성 입력을 지원하지 않아요. 키보드의 마이크 버튼을 써 주세요");return}
+  if(!SR){toast("이 브라우저는 음성 입력을 지원하지 않아요. 키보드의 마이크를 써 주세요");return}
   if(rec){rec.stop();return}
   rec=new SR();rec.lang="ko-KR";rec.interimResults=true;rec.continuous=true;
   const base=ta.value?ta.value.trim()+" ":"";
   rec.onresult=e=>{let s="";for(let i=0;i<e.results.length;i++)s+=e.results[i][0].transcript;ta.value=base+s};
   rec.onend=()=>{rec=null;btn.classList.remove("on")};
-  rec.onerror=()=>{toast("음성을 듣지 못했어요. 글로 적어도 돼요")};
+  rec.onerror=()=>{toast("잘 듣지 못했어요. 글로 적어도 돼요")};
   btn.classList.add("on");rec.start();
 }
 const talkBox=(id,ph)=>`<div class="talkrow"><textarea class="talk" id="${id}" placeholder="${ph}"></textarea><button class="mic" data-mic="${id}" aria-label="말로 입력">${ic("mic")}</button></div>`;
 
-/* ---------- 1) 말로 상황 설명 → 자동 분류 ---------- */
+/* ---------- 1) 말로 상황 설명 ---------- */
 function localTriage(t){
   const has=(...w)=>w.some(x=>t.includes(x));
   const r={injured:"unknown",place:"unknown",type:"unknown",role:"unknown",summary:"",first:""};
@@ -429,33 +387,35 @@ function localTriage(t){
   if(has("고속도로","자동차전용","톨게이트","휴게소"))r.place="highway";else if(has("주차","골목","아파트","단지"))r.place="parking";else if(has("도로","교차로","신호","횡단보도","사거리"))r.place="road";
   if(has("보행자","사람을","사람이랑","자전거","킥보드"))r.type="person";else if(has("주차된","세워진","세워 둔","차 주인"))r.type="parked";else if(has("가드레일","전봇대","혼자","포트홀","벽에"))r.type="single";else if(has("차","박았","받았","추돌"))r.type="car";
   if(has("뒤차가","받혔","박혔","저를 박"))r.role="gothit";else if(has("제가 박","내가 박","들이받","앞차를"))r.role="hit";
-  r.summary="(기본 분석) 말한 내용에서 단어로 골랐어요";r.first=r.injured!=="no"?"다친 사람이 있으면 119에 먼저 전화하세요.":r.place==="highway"?"가드레일 밖으로 대피하세요.":"비상등을 켜고 안전을 확인하세요.";
+  r.summary="말씀하신 단어로 골랐어요";r.first=r.injured!=="no"?"다친 사람이 있으면 119에 먼저 전화하세요.":r.place==="highway"?"가드레일 밖으로 대피하세요.":"비상등을 켜고 안전을 확인하세요.";
   return r;
 }
 function sheetTalk(){
-  openSheet(`<h2>${ic("mic")}말로 상황 설명하기</h2>
-  <p class="muted" style="font-size:14px">어디서, 무엇과, 다친 사람이 있는지 편하게 말하세요. AI가 질문에 대신 답해 두고 바로 할 일로 넘어가요.</p>
+  openSheet(`<h2>어떤 사고인지 말해 주세요</h2>
+  <p class="lead">어디서, 무엇과 부딪혔는지, 다친 사람이 있는지 편하게 말하면 AI가 질문에 대신 답해 둘게요.</p>
   ${talkBox("talkTxt","예) 사거리에서 신호 기다리는데 뒤차가 박았어요. 다친 사람은 없어요.")}
   <div class="chips">${["고속도로에서 앞차를 박았어요, 동승자가 목이 아프대요","골목에서 주차된 차를 긁었어요","횡단보도에서 킥보드랑 부딪혔어요"].map(x=>`<button data-fill="talkTxt">${x}</button>`).join("")}</div>
   <div id="talkRes"></div>
-  <button class="btn y" data-a="talkGo">${ic("send")}AI가 정리하기</button><button class="btn ghost" data-a="close">닫기</button>`);
+  <button class="btn" data-a="talkGo">정리하기</button>`);
 }
 async function talkGo(){
   const t=($("#talkTxt").value||"").trim();if(!t){toast("상황을 한두 문장으로 적거나 말해 주세요");return}
-  const box=$("#talkRes");box.innerHTML='<div class="ailine"><span class="spin"></span>AI가 상황을 정리하는 중</div>';
-  let r,src="GPT";
-  try{r=await gpt("triage",{text:t},15000)}catch(e){r=localTriage(t);src="기본"}
+  const box=$("#talkRes");box.innerHTML='<div class="by"><span class="spin"></span>AI가 정리하고 있어요</div>';
+  let r,src="gpt";
+  try{r=await gpt("triage",{text:t},15000)}catch(e){r=localTriage(t);src="local"}
   S._triage=r;
-  const gb=document.querySelector('[data-a="talkGo"]');if(gb){gb.className="btn ghost";gb.innerHTML="고쳐서 다시 정리"}
+  const gb=document.querySelector('[data-a="talkGo"]');if(gb){gb.className="btn sub";gb.textContent="고쳐서 다시 정리"}
   const ch=document.querySelector(".sheet .chips");if(ch)ch.hidden=true;
-  const v=(k,map)=>r[k]&&r[k]!=="unknown"?map[r[k]]:'<span class="q">직접 고를게요</span>';
-  box.innerHTML=`<div class="understood"><span>AI 이해</span><b>${esc(r.summary||"-")}</b>
-    <span>부상자</span>${r.injured==="unknown"?'<span class="q">확인 필요 · 119 먼저</span>':INAME[r.injured]}
-    <span>장소</span>${v("place",PNAME)}<span>유형</span>${v("type",TNAME)}
-    ${r.type==="car"||r.type==="person"?`<span>누가</span>${v("role",RNAME)}`:""}
-    <span>먼저</span><b>${esc(r.first||"")}</b></div>
-    <p class="muted"><span class="src ${src==="GPT"?"":"dev"}">${src==="GPT"?"GPT-6 LUNA":"오프라인 분석"}</span> 틀린 칸은 다음 화면에서 다시 물어봐요.</p>
-    <button class="btn" data-a="talkStart">맞아요 · 바로 시작</button>`;
+  const v=(k,map)=>r[k]&&r[k]!=="unknown"?map[r[k]]:'<span class="q">다음 화면에서 물어볼게요</span>';
+  box.innerHTML=`<div class="kv box">
+    <div><span>상황</span><b class="v">${esc(r.summary||"-")}</b></div>
+    <div><span>부상자</span><span class="v">${r.injured==="unknown"?'<span class="q">확인 필요 · 119부터 안내해요</span>':INAME[r.injured]}</span></div>
+    <div><span>장소</span><span class="v">${v("place",PNAME)}</span></div>
+    <div><span>유형</span><span class="v">${v("type",TNAME)}</span></div>
+    ${r.type==="car"||r.type==="person"?`<div><span>누가</span><span class="v">${v("role",RNAME)}</span></div>`:""}
+    <div><span>먼저</span><b class="v">${esc(r.first||"")}</b></div></div>
+    <p class="small" style="margin-top:8px">${src==="gpt"?"GPT-6 Luna가 정리했어요.":"인터넷 연결이 약해 단어로만 골랐어요."} 틀린 부분은 ‹ 로 돌아가 고칠 수 있어요.</p>
+    <button class="btn" data-a="talkStart" style="margin-top:12px">맞아요, 시작할게요</button>`;
 }
 function talkStart(){
   const r=S._triage;if(!r)return;
@@ -464,9 +424,8 @@ function talkStart(){
   S.role=(S.type==="car"||S.type==="person")&&r.role!=="unknown"?r.role:null;
   S.auto=true;S.aiSummary=r.summary||"";S.ai=0;S.pi=0;S.extra=[];
   S.started=Date.now();S.hist=[];loadModel();getLoc();closeSheet();
-  go(S.injured!=="no"?"call119":nextScreen("call119"));toast("AI가 답을 채웠어요 · 틀리면 ‹ 로 돌아가세요");
+  go(S.injured!=="no"?"call119":nextScreen("call119"));toast("AI가 답을 채웠어요");
 }
-/* 다음 화면: AI가 채운 답은 건너뜀 */
 function nextScreen(cur){
   const seq=["injured","call119","place","bitbox","type","role","actions"];
   for(let i=seq.indexOf(cur)+1;i<seq.length;i++){const s=seq[i];
@@ -489,20 +448,20 @@ function askChips(){
 }
 function sheetAsk(){
   const hist=S.qa.slice(-3).map(a=>ansHtml(a)).join("");
-  openSheet(`<h2>${ic("chat")}현장에서 궁금한 것</h2>
-  <p class="muted" style="font-size:14px">지금 상황(${esc(ctxText())})을 알고 답해요. 법률 자문이 아닌 일반 안내예요.</p>
+  openSheet(`<h2>궁금한 걸 물어보세요</h2>
+  <p class="lead">지금 상황을 알고 답해요. 법률 자문이 아닌 일반 안내예요.</p>
   <div id="askList" style="display:flex;flex-direction:column;gap:8px">${hist}</div>
   <div class="chips">${askChips().map(x=>`<button data-askq="${esc(x)}">${x}</button>`).join("")}</div>
-  ${talkBox("askTxt","궁금한 것을 적거나 말하세요")}
-  <button class="btn y" data-a="askGo">${ic("send")}물어보기</button><button class="btn ghost" data-a="close">닫기</button>`);
+  ${talkBox("askTxt","궁금한 것을 적거나 말해 주세요")}
+  <button class="btn" data-a="askGo">물어보기</button>`);
 }
 function ansHtml(a){
-  const call={"119":["tel:119","119 전화"],"112":["tel:112","112 전화"],"132":["tel:132","법률구조공단 132"],insurer:[insHref(),(my.insurer||"내 보험사")+" 전화"]}[a.call];
-  return `<div class="ans"><div class="q">Q. ${esc(a.q)}</div>${esc(a.answer)}${a.law?`<div class="lw">근거 · ${esc(a.law)}</div>`:""}${call?`<a class="btn ${a.call==="119"||a.call==="112"?"red":""}" href="${call[0]}">${ic("phone")}${esc(call[1])}</a>`:""}</div>`;
+  const call={"119":["tel:119","119에 전화"],"112":["tel:112","112에 전화"],"132":["tel:132","법률구조공단 132에 전화"],insurer:[insHref(),(my.insurer||"내 보험사")+"에 전화"]}[a.call];
+  return `<div class="ans"><div class="q">${esc(a.q)}</div>${esc(a.answer)}${a.law?`<div class="lw">근거: ${esc(a.law)}</div>`:""}${call?`<a class="btn ${a.call==="119"||a.call==="112"?"red":"lt"}" href="${call[0]}">${esc(call[1])}</a>`:""}</div>`;
 }
 async function askGo(q){
   q=(q||$("#askTxt").value||"").trim();if(!q)return;
-  const list=$("#askList");const ph=document.createElement("div");ph.className="ans";ph.innerHTML=`<div class="q">Q. ${esc(q)}</div><span class="spin"></span>`;list.appendChild(ph);ph.scrollIntoView({block:"nearest"});
+  const list=$("#askList");const ph=document.createElement("div");ph.className="ans";ph.innerHTML=`<div class="q">${esc(q)}</div><span class="spin"></span>`;list.appendChild(ph);ph.scrollIntoView({block:"nearest"});
   if($("#askTxt"))$("#askTxt").value="";
   let a;
   try{const r=await gpt("ask",{q,ctx:ctxText()},20000);a=Object.assign({q},r)}
@@ -510,13 +469,13 @@ async function askGo(q){
   S.qa.push(a);ph.outerHTML=ansHtml(a);
 }
 
-/* ---------- 3) 상대 정보 받아 적기 ---------- */
+/* ---------- 3) 받아 적기 ---------- */
 function sheetDictate(){
-  openSheet(`<h2>${ic("pen")}불러 주는 대로 받아 적기</h2>
-  <p class="muted" style="font-size:14px">상대방이 이름·연락처·차량번호·보험사를 말할 때 마이크를 누르세요. AI가 칸을 나눠 채워요.</p>
+  openSheet(`<h2>불러 주는 대로 받아 적을게요</h2>
+  <p class="lead">상대방이 이름·연락처·차량번호·보험사를 말할 때 마이크를 누르세요.</p>
   ${talkBox("dicTxt","예) 김민수, 공일공 일이삼사 오육칠팔, 12가 3456, OO화재")}
   <div id="dicRes"></div>
-  <button class="btn y" data-a="dicGo">${ic("send")}칸에 채우기</button><button class="btn ghost" data-a="close">닫기</button>`);
+  <button class="btn" data-a="dicGo">칸에 채우기</button>`);
 }
 function localExtract(t){
   const phone=(t.match(/01[016789][-\s]?\d{3,4}[-\s]?\d{4}/)||[""])[0].replace(/\s/g,"-");
@@ -526,7 +485,7 @@ function localExtract(t){
 }
 async function dicGo(){
   const t=($("#dicTxt").value||"").trim();if(!t)return;
-  $("#dicRes").innerHTML='<div class="ailine"><span class="spin"></span>AI가 받아 적는 중</div>';
+  $("#dicRes").innerHTML='<div class="by"><span class="spin"></span>받아 적고 있어요</div>';
   let r;try{r=await gpt("extract",{text:t},15000)}catch(e){r=localExtract(t)}
   let n=0;for(const k of ["name","phone","plate","insurer"])if(r[k]){S.other[k]=k==="plate"?r[k].replace(/\s/g,""):r[k];S.filled.add(k);n++}
   if(r.memo){S.memo=(S.memo?S.memo+" / ":"")+r.memo;n++}
@@ -539,16 +498,16 @@ function recordText(){
   return reportText()+`\n장소 구분: ${PNAME[S.place]||"-"}\n누가: ${RNAME[S.role]||"-"}\nAI가 이해한 상황: ${S.aiSummary||"-"}\n완료한 조치: ${A.filter(a=>S.done.has(a.id)).map(a=>a.title).join(", ")||"없음"}\n사진 판독: ${L.map(s=>{const g=S.photos[s.id].gpt;return s.t+" — "+(g&&g.seen?g.seen:S.photos[s.id].tags.join(", ")||"기록")}).join(" / ")||"없음"}`;
 }
 async function sheetDoc(){
-  openSheet(`<h2>${ic("doc")}AI 사고 경위서 초안</h2><div id="docBox"><div class="ailine"><span class="spin"></span>기록한 내용으로 경위서를 쓰는 중</div></div><button class="btn ghost" data-a="close">닫기</button>`);
+  openSheet(`<h2>사고 경위서 초안</h2><div id="docBox"><div class="by"><span class="spin"></span>기록한 내용으로 쓰고 있어요</div></div>`);
   let r;
   try{r=await gpt("report",{record:recordText()},28000)}
-  catch(e){$("#docBox").innerHTML='<div class="note amber"><b>AI에 연결하지 못했어요</b>아래 ‘공유’로 사고 기록을 보내고, 경위서는 보험사 안내에 따라 작성하세요.</div>';return}
+  catch(e){$("#docBox").innerHTML='<div class="callout"><b>AI에 연결하지 못했어요</b>‘공유’로 사고 기록을 보내고, 경위서는 보험사 안내에 따라 작성하세요.</div>';return}
   S._doc=r;
-  $("#docBox").innerHTML=`<div class="doc"><h3>사고 경위서 (초안)</h3>${esc(r.statement)}</div>
+  $("#docBox").innerHTML=`<div style="display:flex;flex-direction:column;gap:10px"><div class="doc"><h3>경위서</h3>${esc(r.statement)}</div>
   <div class="doc"><h3>보험사 접수 문자</h3>${esc(r.sms)}</div>
-  ${r.missing&&r.missing.length?`<div class="note amber"><b>지금 챙기면 좋은 것</b>${r.missing.map(esc).join(" · ")}</div>`:""}
-  <p class="muted"><span class="src">GPT-6 LUNA</span> 기록한 사실로만 썼어요. 제출 전 꼭 읽고 고치세요. 과실을 인정하는 표현은 넣지 않았어요.</p>
-  <div class="row2"><button class="btn" data-a="docCopy">${ic("doc")}경위서 복사</button><button class="btn y" data-a="smsShare">${ic("share")}문자 보내기</button></div>`;
+  ${r.missing&&r.missing.length?`<div class="callout"><b>지금 챙기면 좋은 것</b>${r.missing.map(esc).join(" · ")}</div>`:""}
+  <p class="small">GPT-6 Luna가 기록한 사실로만 썼어요. 과실을 인정하는 표현은 넣지 않았고, 보내기 전에 꼭 읽고 고쳐 주세요.</p>
+  <div class="two"><button class="btn sub" data-a="docCopy">경위서 복사</button><button class="btn" data-a="smsShare">문자로 보내기</button></div></div>`;
 }
 
 /* ---------- 이동 ---------- */
@@ -556,172 +515,179 @@ function go(s){S.hist.push({screen:S.screen,ai:S.ai,pi:S.pi});S.screen=s;closeSh
 function back(){const h=S.hist.pop();if(!h)return;S.screen=h.screen;S.ai=h.ai;S.pi=h.pi;closeSheet();render()}
 
 /* ---------- 화면 ---------- */
-function o(attr,icon,label,sub,cls){return `<button class="opt ${cls||""}" ${attr}><span class="ib">${ic(icon)}</span><span class="tx">${label}${sub?`<small>${sub}</small>`:""}</span>${ic("chev","ch")}</button>`}
+function o(attr,icon,label,sub,cls){return `<button class="row" ${attr}><span class="ic ${cls||""}">${ic(icon)}</span><span class="tx">${label}${sub?`<small>${sub}</small>`:""}</span>${ic("chev","ch")}</button>`}
 const R={};
 R.home=()=>`
-  <div class="eyebrow">교통사고 현장 길잡이</div>
-  <h1>사고가 났나요?<br>하나씩 같이 할게요.</h1>
-  <button class="sos" data-a="start"><span class="k">STEP BY STEP · 7단계</span><span class="t">지금 사고 났어요</span><span class="s">누르면 사고 시각과 위치가 기록돼요</span></button>
-  <button class="opt ai" data-a="talk" style="min-height:64px;flex:none"><span class="ib" style="background:var(--ink);color:var(--y)">${ic("mic")}</span><span class="tx">말로 설명하기<small>AI가 질문에 대신 답해요</small></span>${ic("chev","ch")}</button>
-  <button class="mini" data-a="insSheet">${ic("phone")}내 보험사 번호<b>${my.phone?esc(my.insurer||"저장됨")+" · "+esc(my.phone):"미리 저장하기"}</b></button>
-  <div class="btns"><button class="btn link" data-a="demo">미리 둘러보기 (체험 모드)</button></div>
-  <p class="muted">법률 자문·과실 판정을 대신하지 않는 일반 안내예요. 생명이 위급하면 바로 119.</p>`;
-R.injured=()=>`
-  <div class="eyebrow">01 안전 확인</div>
-  <h1>다친 사람이 있나요?</h1><p class="lead">나, 동승자, 상대방 모두 포함</p>
-  <div class="opts">${o('data-inj="yes"',"inj","네, 다친 사람이 있어요","","red")}${o('data-inj="unknown"',"q","잘 모르겠어요","아파 보이거나 ‘괜찮다’고만 해요","red")}${o('data-inj="no"',"ok","아무도 안 다쳤어요")}</div>`;
-R.call119=()=>`
-  <div class="bigalert"><span class="k">EMERGENCY · 119</span><h2>119에 먼저<br>전화하세요</h2>
-  <p>의식·호흡·출혈을 확인하고, 목·허리를 다쳤을 수 있으면 <b>함부로 옮기지 마세요.</b></p>
-  ${S.injured==="unknown"?'<p class="sm">잘 모를 때는 다친 사람이 있는 것으로 보고 안내할게요.</p>':""}</div>
-  <div class="btns"><a class="btn y" href="tel:119">${ic("phone")}119 전화하기</a><button class="btn ghost" data-a="next">전화했어요 · 다음</button></div>`;
-R.place=()=>`
-  <div class="eyebrow">01 안전 확인</div>
-  <h1>사고 난 곳은 어디인가요?</h1>
-  <div class="opts">${o('data-place="highway"',"hw","고속도로·자동차전용도로","2차 사고 위험이 커요","red")}${o('data-place="road"',"sig","일반 도로·교차로")}${o('data-place="parking"',"park","주차장·골목")}</div>`;
-R.bitbox=()=>`
-  <div class="eyebrow red">고속도로 · 2차 사고 위험</div>
-  <h1>사진보다 대피가 먼저예요</h1>
-  <div class="steps4">
-    <div class="s4"><span class="n">1</span><div>비상등 켜기</div></div>
-    <div class="s4"><span class="n">2</span><div>트렁크 열기<small>뒤차가 멀리서 알아보게</small></div></div>
-    <div class="s4"><span class="n">3</span><div>가드레일 밖으로 대피<small>차 안·차 사이에 있지 마세요</small></div></div>
-    <div class="s4"><span class="n">4</span><div>안전한 곳에서 신고<small>112 · 한국도로공사 1588-2504</small></div></div>
+  <h1>사고가 났나요?<br>하나씩 같이 할게요</h1>
+  <p class="lead">물어보는 것에 답하면 지금 할 일을 한 번에 하나씩 알려 드려요.</p>
+  <div class="list">
+    ${o('data-a="talk"',"mic","말로 설명하기","AI가 질문에 대신 답해요","blue")}
+    ${o('data-a="insSheet"',"phone","내 보험사 번호",my.phone?esc((my.insurer||"저장됨")+" · "+my.phone):"미리 저장해 두면 바로 걸 수 있어요")}
+    ${o('data-a="demo"',"eye","미리 둘러보기","사고 없이 체험해 볼 수 있어요")}
   </div>
-  <p class="muted">한국도로공사 2차 사고 예방 행동요령(비트박스)</p>
-  <div class="btns"><div class="row2"><a class="btn red" href="tel:112">${ic("phone")}112</a><a class="btn" href="tel:15882504">${ic("phone")}도로공사</a></div><button class="btn y" data-a="next">대피했어요 · 다음</button></div>`;
+  <div class="grow"></div>
+  <p class="small" style="margin-bottom:10px">법률 자문이나 과실 판정을 대신하지 않는 일반 안내예요.</p>
+  <button class="btn red sosbtn" data-a="start">지금 사고 났어요</button>`;
+R.injured=()=>`
+  <h1>다친 사람이 있나요?</h1><p class="lead">나, 동승자, 상대방 모두 포함해서요.</p>
+  <div class="list">${o('data-inj="yes"',"inj","네, 있어요","","red")}${o('data-inj="unknown"',"q","잘 모르겠어요","아파 보이거나 ‘괜찮다’고만 해요")}${o('data-inj="no"',"ok","아무도 안 다쳤어요")}</div>`;
+R.call119=()=>`
+  <h1>119에 먼저<br>전화하세요</h1>
+  <p class="desc">의식·호흡·출혈을 확인하고, 목이나 허리를 다쳤을 수 있으면 <b>함부로 옮기지 마세요.</b></p>
+  ${S.injured==="unknown"?'<p class="lead">잘 모를 때는 다친 사람이 있는 것으로 보고 안내할게요.</p>':""}
+  <div class="grow"></div>
+  <div class="btns"><a class="btn red" href="tel:119">119에 전화하기</a><button class="btn sub" data-a="next">전화했어요</button></div>`;
+R.place=()=>`
+  <h1>어디에서 사고가 났나요?</h1>
+  <div class="list">${o('data-place="highway"',"hw","고속도로·자동차전용도로","2차 사고 위험이 커요","red")}${o('data-place="road"',"sig","일반 도로·교차로")}${o('data-place="parking"',"park","주차장·골목")}</div>`;
+R.bitbox=()=>`
+  <h1>사진보다 대피가 먼저예요</h1>
+  <p class="lead">고속도로에서는 2차 사고가 가장 위험해요.</p>
+  <ol class="steps">
+    <li><span class="n">1</span><div>비상등 켜기</div></li>
+    <li><span class="n">2</span><div>트렁크 열기<small>뒤차가 멀리서 알아볼 수 있게요</small></div></li>
+    <li><span class="n">3</span><div>가드레일 밖으로 대피<small>차 안이나 차 사이에 있지 마세요</small></div></li>
+    <li><span class="n">4</span><div>안전한 곳에서 신고<small>112 또는 한국도로공사 1588-2504</small></div></li>
+  </ol>
+  <div class="grow"></div>
+  <p class="small">한국도로공사 2차 사고 예방 행동요령</p>
+  <div class="btns"><div class="two"><a class="btn sub" href="tel:112">112</a><a class="btn sub" href="tel:15882504">도로공사</a></div><button class="btn" data-a="next">대피했어요</button></div>`;
 R.type=()=>`
-  <div class="eyebrow">02 사고 유형</div>
   <h1>어떤 사고인가요?</h1>
-  <div class="opts">${o('data-type="car"',"car","차와 차","상대 차량과 부딪혔어요")}${o('data-type="person"',"walk","차와 사람","보행자·자전거·킥보드")}${o('data-type="single"',"wall","혼자 사고","시설물·가드레일·포트홀")}${o('data-type="parked"',"park","주차된 차·물건","상대 운전자가 없어요")}</div>`;
+  <div class="list">${o('data-type="car"',"car","차와 차","상대 차량과 부딪혔어요")}${o('data-type="person"',"walk","차와 사람","보행자·자전거·킥보드")}${o('data-type="single"',"wall","혼자 사고","시설물·가드레일·포트홀")}${o('data-type="parked"',"park","주차된 차나 물건","상대 운전자가 없어요")}</div>`;
 R.role=()=>`
-  <div class="eyebrow">02 사고 유형</div>
-  <h1>누가 부딪혔나요?</h1><p class="lead">모르면 ‘잘 모르겠어요’를 고르세요. 과실은 나중에 정해져요.</p>
-  <div class="opts">${o('data-role="hit"',"hit","내가 부딪혔어요")}${o('data-role="gothit"',"gothit","내가 받혔어요")}${o('data-role="unknown"',"both","잘 모르겠어요","둘 다 움직이고 있었어요")}</div>`;
+  <h1>누가 부딪혔나요?</h1><p class="lead">잘 모르면 그대로 골라도 괜찮아요. 과실은 나중에 정해져요.</p>
+  <div class="list">${o('data-role="hit"',"hit","내가 부딪혔어요")}${o('data-role="gothit"',"gothit","내가 받혔어요")}${o('data-role="unknown"',"both","잘 모르겠어요","둘 다 움직이고 있었어요")}</div>`;
 R.actions=()=>{
   const A=buildActions();const i=Math.min(S.ai,A.length-1);const a=A[i];
-  return `<div class="eyebrow"><span class="count">${String(i+1).padStart(2,"0")} / ${String(A.length).padStart(2,"0")}</span><span class="dots">${A.map((x,k)=>`<i class="${k===i?"c":S.done.has(x.id)?"d":""}"></i>`).join("")}</span></div>
-  <div class="task"><span class="tag ${a.kind}">${a.kind==="duty"?ic("law"):""}${TAG[a.kind]}</span><div class="mid"><h2>${a.title}</h2><p>${a.desc}</p></div><div class="law">${a.law}</div></div>
-  <div class="btns"><button class="btn" data-a="actDone">했어요 · 다음</button><button class="btn ghost" data-a="actSkip">${i===A.length-1?"사진 단계로 넘어가기":"나중에 할게요"}</button></div>`;
+  return `<p class="pre ${a.kind}">${PRE[a.kind]}</p>
+  <h1>${a.title}</h1>
+  <p class="desc">${a.desc}</p>
+  <div class="grow"></div>
+  <div class="why"><span class="h">왜 그래야 하나요</span>${a.law}</div>
+  <div class="btns"><button class="btn" data-a="actDone">했어요</button><button class="btn sub" data-a="actSkip">${i===A.length-1?"사진 남기러 가기":"나중에 할게요"}</button></div>`;
 };
 R.photos=()=>{
   const L=buildShots();const i=Math.min(S.pi,L.length-1);const s=L[i];const p=S.photos[s.id];
-  const need=L.filter(x=>!x.opt);const okN=need.filter(x=>S.photos[x.id]&&S.photos[x.id].status!=="retry").length;
   const last=i===L.length-1;
-  const lab={ok:"좋아요",warn:"확인해 주세요",retry:"다시 찍어 주세요"};
-  const nextLabel=last?"다음: 정보 기록":"다음 사진";
+  const lab={ok:"좋아요",warn:"한 번 확인해 주세요",retry:"다시 찍어 주세요"};
+  const nextLabel=last?"다음":"다음 사진";
   let body,btns;
   if(S.busy===s.id){
-    body=`<div class="cam" style="cursor:default"><span class="spin" style="width:34px;height:34px;border-width:4px"></span>기기 AI가 사진을 보는 중</div>`;btns="";
+    body=`<div class="cam" style="cursor:default"><span class="spin" style="width:30px;height:30px;border-width:3px"></span>사진을 보고 있어요</div>`;btns="";
   } else if(p){
     const g=p.gpt&&typeof p.gpt==="object"?p.gpt:null;
-    const text=g?esc(g.message):p.msg.join("<br>");
-    const srcTag=g?'<span class="src">GPT 판독</span>':p.gpt==="busy"?'<span class="src dev" style="display:flex;gap:5px;align-items:center"><span class="spin" style="width:10px;height:10px;border-width:2px"></span>GPT 판독 중</span>':'<span class="src dev">기기 AI</span>';
-    body=`<div class="prev" data-zoom="${s.id}"><img src="${p.url}" alt="AI 분석 결과"></div>
-    <div class="verdict ${p.status}"><div class="vh"><b>${lab[p.status]}</b>${srcTag}</div>${text}<div class="tags">${g&&g.seen?"판독: "+esc(g.seen)+" · ":""}기기 인식: ${p.tags.join(", ")||"없음"}${g&&g.plate?" · 번호 "+esc(g.plate):""}</div></div>`;
+    const text=g?esc(g.message):p.msg.join(" ");
+    const by=g?"GPT-6 Luna 판독":p.gpt==="busy"?'<span class="spin" style="width:12px;height:12px"></span>GPT가 한 번 더 보는 중':"휴대폰 AI 판독";
+    body=`<div class="prev" data-zoom="${s.id}"><img src="${p.url}" alt="사진 분석 결과"></div>
+    <div class="res ${p.status}"><div class="rh"><span class="dot"></span><b>${lab[p.status]}</b><span class="by" style="margin-left:auto">${by}</span></div>${text}<div class="meta">${g&&g.seen?esc(g.seen)+" · ":""}인식: ${p.tags.join(", ")||"없음"}</div></div>`;
     btns=p.status==="retry"
-      ?`<label class="btn red">${ic("cam")}다시 찍기<input type="file" accept="image/*" capture="environment" data-shot="${s.id}"></label><button class="btn ghost" data-a="shotNext">그래도 ${nextLabel}</button>`
-      :`<button class="btn" data-a="shotNext">${nextLabel}</button><label class="btn ghost">${ic("cam")}다시 찍기<input type="file" accept="image/*" capture="environment" data-shot="${s.id}"></label>`;
+      ?`<label class="btn red">다시 찍기<input type="file" accept="image/*" capture="environment" data-shot="${s.id}"></label><button class="btn sub" data-a="shotNext">그래도 ${nextLabel}</button>`
+      :`<button class="btn" data-a="shotNext">${nextLabel}</button><label class="btn sub">다시 찍기<input type="file" accept="image/*" capture="environment" data-shot="${s.id}"></label>`;
   } else {
-    body=`<label class="cam">${ic("cam")}촬영하기<small>${s.d}</small><input type="file" accept="image/*" capture="environment" data-shot="${s.id}"></label>`;
-    btns=`<div class="row2"><label class="btn ghost">${ic("img")}앨범에서<input type="file" accept="image/*" data-shot="${s.id}"></label><button class="btn ghost" data-a="shotNext">${s.opt?"없어요 · 건너뛰기":"건너뛰기"}</button></div>`;
+    body=`<label class="cam">${ic("cam")}사진 찍기<small>찍으면 AI가 바로 확인해요</small><input type="file" accept="image/*" capture="environment" data-shot="${s.id}"></label>`;
+    btns=`<div class="two"><label class="btn sub">앨범에서 고르기<input type="file" accept="image/*" data-shot="${s.id}"></label><button class="btn sub" data-a="shotNext">${s.opt?"없어요":"건너뛰기"}</button></div>`;
   }
-  return `<div class="eyebrow"><span class="count">사진 ${String(i+1).padStart(2,"0")}/${String(L.length).padStart(2,"0")} · ${s.isExtra?"AI 추가 요청":s.opt?"선택":"필수"}</span><span>필수 ${okN}/${need.length}</span></div>
-  <div class="ailine" id="aiLine"></div>
-  <div class="shot ${s.isExtra?"extra":""}"><div class="shead"><div class="ic">${ic(s.ic)}</div><div><h2>${s.t}</h2><p>${S.place==="highway"?"<b style='color:var(--red)'>가드레일 밖 안전한 곳에서만</b> · ":""}${s.d}</p></div></div>${body}</div>
+  return `${s.isExtra?'<p class="pre tip">AI가 한 장 더 요청했어요</p>':s.opt?'<p class="pre warn">있다면 찍어 주세요</p>':""}<h1>${s.t}</h1><p class="lead">${S.place==="highway"?'<b style="color:var(--red)">가드레일 밖 안전한 곳에서만</b> ':""}${s.d}</p>
+  ${body}
   <div class="btns">${btns}</div>`;
 };
 const fcls=k=>S.filled.has(k)?' class="filled"':"";
 R.info=()=>`
-  <div class="eyebrow hs">05 기록</div>
-  <div class="hline"><h1>아는 것만 적어 두세요</h1>${S.type!=="single"?`<button class="chipbtn" data-a="dictate">${ic("mic")}받아 적기</button>`:""}</div>
+  <div class="hl"><h1>${S.type==="single"?"메모를 남겨 두세요":"상대방 정보를<br>적어 두세요"}</h1>${S.type!=="single"?`<button class="btn lt" data-a="dictate" style="width:auto;min-height:40px;font-size:14.5px;padding:0 12px;flex:none;margin-top:2px">${ic("mic")}받아 적기</button>`:""}</div>
   ${S.type!=="single"?`<div class="fields">
-    <div class="field"><label>${S.type==="parked"?"차 주인 이름":"상대 이름"}</label><input data-o="name"${fcls("name")} value="${esc(S.other.name)}" autocomplete="off"></div>
+    <div class="field"><label>${S.type==="parked"?"차 주인 이름":"이름"}</label><input data-o="name"${fcls("name")} value="${esc(S.other.name)}" autocomplete="off"></div>
     <div class="field"><label>연락처</label><input data-o="phone"${fcls("phone")} inputmode="tel" value="${esc(S.other.phone)}" autocomplete="off"></div>
     <div class="field"><label>차량번호</label><input data-o="plate"${fcls("plate")} value="${esc(S.other.plate)}" placeholder="12가3456" autocomplete="off"></div>
     <div class="field"><label>보험사</label><input data-o="insurer"${fcls("insurer")} value="${esc(S.other.insurer)}" autocomplete="off"></div></div>`:""}
-  <div class="field"><label>메모 (목격자, 주변 CCTV, 상황)</label><input id="memo" value="${esc(S.memo)}" autocomplete="off"></div>
-  <div class="locline">${S.started?fmt(S.started):"-"}<br><span id="locTxt">${locText()}</span> <button class="relocate" data-a="loc">다시 기록</button></div>
-  ${S.filled.size?'<p class="muted">노란 칸은 AI가 채운 칸이에요. 맞는지 상대에게 확인하세요.</p>':""}
+  <div class="field" style="margin-top:10px"><label>메모 (목격자, CCTV, 상황)</label><input id="memo" value="${esc(S.memo)}" autocomplete="off"></div>
+  <div class="locline">${S.started?fmt(S.started):"-"} · <span id="locTxt">${locText()}</span><button class="relocate" data-a="loc">다시 찾기</button></div>
+  ${S.filled.size?'<p class="small" style="margin-top:6px">파란 칸은 AI가 채웠어요. 상대에게 맞는지 확인해 주세요.</p>':""}
   <div class="grow"></div>
-  <div class="btns"><button class="btn" data-go="wait">다음: 보험사·경찰 부르기</button></div>`;
+  <div class="btns"><button class="btn" data-go="wait">다음</button></div>`;
 function policeNote(){
   if(S.injured!=="no")return {c:"red",t:"경찰 신고는 의무예요",d:"사람이 다친 사고예요. 신고하지 않고 떠나면 처벌받을 수 있어요(도로교통법 제54조 제2항)."};
-  if(S.type==="parked")return {c:"amber",t:"연락처를 남겼다면 신고 의무는 없어요",d:"불안하면 112에 알려 두면 기록이 남아요."};
-  return {c:"blue",t:"물건만 부서졌다면 신고 의무는 없어요",d:"말이 바뀔 것 같거나 음주가 의심되면 112를 부르세요(도로교통법 제54조 제2항 단서)."};
+  if(S.type==="parked")return {c:"",t:"연락처를 남겼다면 신고 의무는 없어요",d:"불안하면 112에 알려 두면 기록이 남아요."};
+  return {c:"",t:"물건만 부서졌다면 신고 의무는 없어요",d:"말이 바뀔 것 같거나 음주가 의심되면 112를 부르세요(도로교통법 제54조 제2항 단서)."};
 }
 R.wait=()=>{
   const n=policeNote();const inj=S.injured!=="no";
-  return `<div class="eyebrow hs">06 연락</div><h1>보험사가 올 때까지</h1>
+  return `<h1>보험사가 올 때까지<br>이렇게 기다리세요</h1>
   <div class="calls">
-    <a class="call n" href="${insHref()}">${esc(my.insurer)||"내 보험사"}<small>${my.phone?esc(my.phone):"번호 저장하기"}</small></a>
+    <a class="call b" href="${insHref()}">${esc(my.insurer)||"내 보험사"}<small>${my.phone?esc(my.phone):"번호 저장하기"}</small></a>
     <a class="call r" href="tel:112">112<small>경찰</small></a>
     <a class="call r" href="tel:119">119<small>구급</small></a>
     <a class="call" href="tel:15882504">도로공사<small>1588-2504</small></a></div>
-  <div class="note ${n.c}"><b>${n.t}</b>${n.d}</div>
-  <ul class="list"><li><span class="n">01</span>차도 밖 안전한 곳에서 기다리세요</li><li><span class="n">02</span>아프면 오늘 진료받으세요. 기록이 있어야 보상받기 쉬워요</li><li><span class="n">03</span>현장 합의·각서 서명은 하지 마세요</li></ul>
+  <div class="callout ${n.c}"><b>${n.t}</b>${n.d}</div>
+  <ul class="plain"><li>차도 밖 안전한 곳에서 기다리세요</li><li>아프면 오늘 진료받으세요. 기록이 있어야 보상받기 쉬워요</li><li>현장 합의나 각서 서명은 하지 마세요</li></ul>
   <div class="grow"></div>
-  <div class="btns">${inj&&S.type!=="parked"?`<div class="row2"><button class="btn ghost" data-a="f12" style="min-height:56px">${ic("law")}형사처벌 확인</button><button class="btn" data-go="report">리포트</button></div>`:`<button class="btn" data-go="report">사고 리포트 보기</button>`}</div>`;
+  <div class="btns">${inj&&S.type!=="parked"?`<div class="two"><button class="btn sub" data-a="f12">형사처벌 확인</button><button class="btn" data-go="report">사고 기록 보기</button></div>`:`<button class="btn" data-go="report">사고 기록 보기</button>`}</div>`;
 };
 R.report=()=>{
   const A=buildActions();const ph=buildShots().filter(s=>S.photos[s.id]);
   const RO={hit:" · 내가 부딪힘",gothit:" · 내가 받힘",unknown:""}[S.role]||"";
   const dn=A.filter(a=>S.done.has(a.id)).length;const miss=A.filter(a=>a.kind==="duty"&&!S.done.has(a.id)).length;
-  return `<div class="eyebrow hs h7">07 리포트</div><h1>사고 기록</h1>
-  <div class="rep">
-    <div><span>언제</span><i style="font-style:normal">${S.started?fmt(S.started):"-"}<br>${locText()}</i></div>
-    <div><span>유형</span>${PNAME[S.place]||"-"} · ${TNAME[S.type]||"-"}${RO} · 부상자 ${INAME[S.injured]||"-"}</div>
-    ${S.type!=="single"?`<div><span>상대</span>${esc([S.other.name,S.other.phone,S.other.plate,S.other.insurer].filter(Boolean).join(" · "))||"미기록"}</div>`:""}
-    <div><span>조치</span>할 일 ${dn}/${A.length} 완료${miss?` · <b style="color:var(--red)">법적 의무 ${miss}개 확인 필요</b>`:""}</div>
-    ${S.memo?`<div><span>메모</span>${esc(S.memo)}</div>`:""}
+  return `<h1>사고 기록</h1>
+  <div class="kv">
+    <div><span>언제</span><span class="v">${S.started?fmt(S.started):"-"}<br>${locText()}</span></div>
+    <div><span>사고</span><span class="v">${PNAME[S.place]||"-"} · ${TNAME[S.type]||"-"}${RO} · 부상자 ${INAME[S.injured]||"-"}</span></div>
+    ${S.type!=="single"?`<div><span>상대</span><span class="v">${esc([S.other.name,S.other.phone,S.other.plate,S.other.insurer].filter(Boolean).join(" · "))||"적지 않음"}</span></div>`:""}
+    <div><span>한 일</span><span class="v">${dn}/${A.length}개${miss?` · <b style="color:var(--red)">법적 의무 ${miss}개를 확인해 주세요</b>`:""}</span></div>
+    ${S.memo?`<div><span>메모</span><span class="v">${esc(S.memo)}</span></div>`:""}
   </div>
-  <div class="thumbs">${ph.map(s=>`<img src="${S.photos[s.id].url}" data-zoom="${s.id}" alt="${s.t}">`).join("")||'<p class="muted">찍은 사진이 없어요.</p>'}</div>
+  <div class="thumbs">${ph.map(s=>`<img src="${S.photos[s.id].url}" data-zoom="${s.id}" alt="${s.t}">`).join("")}</div>
   <div class="grow"></div>
-  <div class="btns"><button class="btn y" data-a="doc">${ic("doc")}AI 경위서·접수 문자 쓰기</button>
-  <div class="row4"><button data-a="share">${ic("share")}공유</button><button data-a="print">${ic("print")}PDF</button><button data-a="next3">${ic("list")}앞으로</button><button data-a="reset">${ic("redo")}처음</button></div></div>`;
+  <div class="btns"><button class="btn" data-a="doc">AI로 경위서 쓰기</button>
+  <div class="tiles"><button data-a="share">${ic("share")}공유</button><button data-a="print">${ic("print")}PDF</button><button data-a="next3">${ic("list")}앞으로</button><button data-a="reset">${ic("redo")}처음으로</button></div></div>`;
 };
 
 /* ---------- 시트 ---------- */
 function openSheet(html){const el=$("#sheet");el.innerHTML=`<div class="sheet">${html}</div>`;el.hidden=false}
 function closeSheet(){if(rec)rec.stop();const el=$("#sheet");el.hidden=true;el.innerHTML=""}
-function sheetIns(){openSheet(`<h2>${ic("phone")}내 보험사 긴급출동 번호</h2><p class="muted" style="font-size:14px">보험증권이나 보험사 앱에 있는 사고접수·긴급출동 번호를 저장하세요. 이 휴대폰에만 저장돼요.</p>
+function sheetIns(){openSheet(`<h2>내 보험사 번호</h2><p class="lead">보험증권이나 보험사 앱에 있는 사고 접수 번호를 저장해 두세요. 이 휴대폰에만 저장돼요.</p>
   <div class="fields"><div class="field"><label>보험사</label><input id="myIns" value="${esc(my.insurer)}" placeholder="예: ○○화재"></div><div class="field"><label>번호</label><input id="myPhone" inputmode="tel" value="${esc(my.phone)}" placeholder="예: 1588-0000"></div></div>
-  <button class="btn" data-a="saveIns">저장</button><button class="btn ghost" data-a="close">닫기</button>`)}
-function sheetF12(){openSheet(`<h2>${ic("law")}형사처벌 대상인지 확인</h2>
-  <p class="muted" style="font-size:14px">사람이 다친 사고도 <b>종합보험에 가입돼 있으면 원칙적으로 공소가 제기되지 않아요</b>(교통사고처리특례법 제4조). 다만 아래 12가지에 해당하거나, 피해자가 중상해를 입었거나, 도주했다면 예외예요.</p>
+  <button class="btn" data-a="saveIns">저장</button>`)}
+function sheetF12(){openSheet(`<h2>형사처벌 대상인지 확인</h2>
+  <p class="lead">사람이 다친 사고도 종합보험에 가입돼 있으면 원칙적으로 공소가 제기되지 않아요(교통사고처리특례법 제4조). 다만 아래 12가지에 해당하거나, 피해자가 중상해를 입었거나, 도주했다면 예외예요.</p>
   <div>${FAULT12.map((f,i)=>`<label class="chk"><input type="checkbox" data-f12="${i}" ${S.fault12.has(i)?"checked":""}>${f}</label>`).join("")}</div>
-  <div id="f12res"></div><button class="btn ghost" data-a="close">닫기</button>`);f12()}
-function f12(){const el=$("#f12res");if(!el)return;el.innerHTML=S.fault12.size?`<div class="note red"><b>보험과 별개로 형사처벌될 수 있어요</b>진술은 사실대로 하고, 조사 전에 대한법률구조공단(☎132)이나 변호사와 상담하세요. 피해자와 합의하면 양형에 반영될 수 있어요.</div>`:`<div class="note green"><b>해당하는 게 없다면</b>종합보험에 가입돼 있고 피해자가 중상해가 아니면 공소가 제기되지 않아요(교통사고처리특례법 제4조 제1항).</div>`}
-function sheetNext3(){openSheet(`<h2>${ic("list")}앞으로 할 일</h2>
-  <div class="note blue"><b>보험·민사</b>보험사 접수번호를 받아 두세요. 과실비율은 손해보험협회 과실비율 인정기준에 따라 정해지고, 보험사끼리 다투면 구상금분쟁심의위원회가 심의해요.</div>
-  ${S.injured!=="no"?`<div class="note amber"><b>형사</b>사람이 다친 사고는 경찰 조사를 받아요. 종합보험 가입과 12대 중과실 해당 여부에 따라 처벌이 갈려요(교통사고처리특례법 제3조·제4조). 무료 상담: 대한법률구조공단 ☎132</div>
-  <div class="note gray"><b>행정</b>사람이 다친 사고는 피해 정도에 따라 운전면허 벌점이 매겨질 수 있어요.</div>`:""}
-  ${S.type==="single"?`<div class="note green"><b>도로 결함</b>도로 관리 잘못이 원인이면 도로관리청에 배상을 청구할 수 있어요(국가배상법 제5조).</div>`:""}
-  <div class="note green"><b>진료</b>아프면 바로 진료받고 진단서·영수증을 모아 두세요.</div>
-  <button class="btn ghost" data-a="close">닫기</button>`)}
+  <div id="f12res"></div><button class="btn sub" data-a="close">닫기</button>`);f12()}
+function f12(){const el=$("#f12res");if(!el)return;el.innerHTML=S.fault12.size?`<div class="callout red" style="margin:0"><b>보험과 별개로 형사처벌될 수 있어요</b>진술은 사실대로 하고, 조사 전에 대한법률구조공단(132)이나 변호사와 상담하세요. 피해자와 합의하면 양형에 반영될 수 있어요.</div>`:`<div class="callout" style="margin:0"><b>해당하는 게 없다면</b>종합보험에 가입돼 있고 피해자가 중상해가 아니면 공소가 제기되지 않아요(교통사고처리특례법 제4조 제1항).</div>`}
+function sheetNext3(){openSheet(`<h2>앞으로 할 일</h2>
+  <div class="kv box">
+  <div><span>보험</span><span class="v">접수번호를 받아 두세요. 과실비율은 손해보험협회 기준에 따라 정해지고, 보험사끼리 다투면 구상금분쟁심의위원회가 심의해요.</span></div>
+  ${S.injured!=="no"?`<div><span>형사</span><span class="v">사람이 다친 사고는 경찰 조사를 받아요. 종합보험 가입과 12대 중과실 해당 여부에 따라 처벌이 갈려요(교통사고처리특례법 제3조·제4조). 무료 상담 132.</span></div>
+  <div><span>면허</span><span class="v">피해 정도에 따라 운전면허 벌점이 매겨질 수 있어요.</span></div>`:""}
+  ${S.type==="single"?`<div><span>도로</span><span class="v">도로 관리 잘못이 원인이면 도로관리청에 배상을 청구할 수 있어요(국가배상법 제5조).</span></div>`:""}
+  <div><span>진료</span><span class="v">아프면 바로 진료받고 진단서·영수증을 모아 두세요.</span></div></div>
+  <button class="btn sub" data-a="close">닫기</button>`)}
 
 /* ---------- 공통 ---------- */
 function render(){
   view.innerHTML=R[S.screen]();view.scrollTop=0;
-  const g=GROUP[S.screen];const prog=$("#prog");
-  if(g==null){prog.hidden=true;$("#hdr").classList.add("noprog")}else{prog.hidden=false;$("#hdr").classList.remove("noprog");$("#progTxt").innerHTML=`<i>${String(g+1).padStart(2,"0")}/07</i>${GNAME[g]}`;$("#bars").innerHTML=[0,1,2,3,4,5,6].map(k=>`<i class="${k<g?"done":k===g?"on":""}"></i>`).join("")}
+  const g=GROUP[S.screen];
+  let title="사고내비",sub="";
+  if(S.screen==="actions"){const A=buildActions();title=`지금 할 일 ${Math.min(S.ai,A.length-1)+1}/${A.length}`}
+  else if(S.screen==="photos"){const L=buildShots();title=`사진 ${Math.min(S.pi,L.length-1)+1}/${L.length}`}
+  else if(g!=null)title=GNAME[g];
+  $("#ttl").classList.toggle("logo",g==null);$("#ttlB").textContent=title;
+  $("#bar").hidden=g==null;if(g!=null)$("#barI").style.width=((g+1)/7*100)+"%";
   $("#back").hidden=!S.hist.length||S.screen==="home";
-  $("#timer").hidden=!S.started;tick();
+  $("#ttlS").hidden=!S.started||g==null;tick();
   $("#dockIns").href=insHref();$("#dockIns").textContent=my.insurer||"내 보험사";
-  if(S.screen==="photos"){aiLine();loadModel()}
+  if(S.screen==="photos")loadModel();
 }
 function insHref(){return my.phone?"tel:"+my.phone.replace(/[^0-9+]/g,""):"#"}
 function esc(s){return String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
 function fmt(d){return new Date(d).toLocaleString("ko-KR",{month:"long",day:"numeric",weekday:"short",hour:"2-digit",minute:"2-digit"})}
-function locText(){if(S.loc)return `<span class="m">${S.loc.lat.toFixed(5)}, ${S.loc.lng.toFixed(5)} ±${Math.round(S.loc.acc)}m</span> · <a href="https://map.kakao.com/link/map/사고위치,${S.loc.lat},${S.loc.lng}" target="_blank" rel="noopener">지도</a>`;return S.locErr?"위치 권한이 없어 기록하지 못했어요":"위치를 찾는 중이에요"}
+function locText(){if(S.loc)return `${S.loc.lat.toFixed(5)}, ${S.loc.lng.toFixed(5)} · <a href="https://map.kakao.com/link/map/사고위치,${S.loc.lat},${S.loc.lng}" target="_blank" rel="noopener">지도</a>`;return S.locErr?"위치를 기록하지 못했어요":"위치를 찾는 중"}
 function getLoc(cb){if(!navigator.geolocation){S.locErr=true;return}navigator.geolocation.getCurrentPosition(p=>{S.loc={lat:p.coords.latitude,lng:p.coords.longitude,acc:p.coords.accuracy};S.locErr=false;const t=$("#locTxt");if(t)t.innerHTML=locText();cb&&cb()},()=>{S.locErr=true;const t=$("#locTxt");if(t)t.innerHTML=locText()},{enableHighAccuracy:true,timeout:10000})}
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("on"),2600)}
-function tick(){if(!S.started)return;const s=Math.floor((Date.now()-S.started)/1000);$("#timer").textContent=`+${String(Math.floor(s/60)).padStart(2,"0")}:${String(s%60).padStart(2,"0")}`}
+function tick(){if(!S.started)return;const s=Math.floor((Date.now()-S.started)/1000);$("#ttlS").textContent=`사고 후 ${Math.floor(s/60)}분 ${String(s%60).padStart(2,"0")}초`}
 setInterval(tick,1000);
 function reportText(){
-  return `[사고내비 사고 기록]\n시각: ${S.started?fmt(S.started):"-"}\n위치: ${S.loc?`https://map.kakao.com/link/map/사고위치,${S.loc.lat},${S.loc.lng}`:"미기록"}\n유형: ${TNAME[S.type]||"-"}\n부상자: ${INAME[S.injured]||"-"}\n상대방: ${[S.other.name,S.other.phone,S.other.plate,S.other.insurer].filter(Boolean).join(" / ")||"미기록"}\n사진: ${buildShots().filter(s=>S.photos[s.id]).map(s=>s.t).join(", ")||"없음"}\n메모: ${S.memo||"-"}`;
+  return `[사고 기록]\n시각: ${S.started?fmt(S.started):"-"}\n위치: ${S.loc?`https://map.kakao.com/link/map/사고위치,${S.loc.lat},${S.loc.lng}`:"미기록"}\n유형: ${TNAME[S.type]||"-"}\n부상자: ${INAME[S.injured]||"-"}\n상대방: ${[S.other.name,S.other.phone,S.other.plate,S.other.insurer].filter(Boolean).join(" / ")||"미기록"}\n사진: ${buildShots().filter(s=>S.photos[s.id]).map(s=>s.t).join(", ")||"없음"}\n메모: ${S.memo||"-"}`;
 }
-function start(demo){S.started=Date.now();S.demo=demo;S.auto=false;S.hist=[];loadModel();getLoc();if(demo)toast("체험 모드 · 아무 차 사진으로 AI 판독을 써 보세요");go("injured")}
+function start(demo){S.started=Date.now();S.demo=demo;S.auto=false;S.hist=[];loadModel();getLoc();if(demo)toast("체험 모드예요. 아무 차 사진으로 AI 판독을 써 보세요");go("injured")}
 function shareText(txt,title){if(navigator.share)navigator.share({title,text:txt}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(txt).then(()=>toast("복사했어요"))}
 
 /* ---------- 이벤트 ---------- */
@@ -763,7 +729,7 @@ document.addEventListener("click",e=>{
     case "actDone":S.done.add(A[Math.min(S.ai,A.length-1)].id);/* falls through */
     case "actSkip":if(S.ai<A.length-1){S.hist.push({screen:"actions",ai:S.ai,pi:S.pi});S.ai++;render()}else{S.pi=0;go("photos")}break;
     case "shotNext":{const L=buildShots();if(S.pi<L.length-1){S.hist.push({screen:"photos",ai:S.ai,pi:S.pi});S.pi++;render()}else go("info");break}
-    case "loc":toast("위치를 찾는 중…");getLoc(()=>toast("위치를 기록했어요"));break;
+    case "loc":toast("위치를 찾고 있어요");getLoc(()=>toast("위치를 기록했어요"));break;
     case "f12":sheetF12();break;
     case "next3":sheetNext3();break;
     case "share":shareText(reportText(),"사고 기록");break;
@@ -771,7 +737,7 @@ document.addEventListener("click",e=>{
     case "reset":if(confirm("사고 기록을 모두 지울까요?")){Object.assign(S,{screen:"home",hist:[],started:null,injured:null,place:null,type:null,role:null,ai:0,pi:0,done:new Set(),photos:{},extra:[],other:{name:"",phone:"",plate:"",insurer:""},memo:"",loc:null,locErr:false,fault12:new Set(),auto:false,aiSummary:"",qa:[],filled:new Set()});render()}break;
   }
 });
-document.addEventListener("input",e=>{if(e.target.dataset.o){S.other[e.target.dataset.o]=e.target.value;S.filled.delete(e.target.dataset.o)}if(e.target.id==="memo")S.memo=e.target.value});
+document.addEventListener("input",e=>{if(e.target.dataset.o){S.other[e.target.dataset.o]=e.target.value;S.filled.delete(e.target.dataset.o);e.target.classList.remove("filled")}if(e.target.id==="memo")S.memo=e.target.value});
 document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.id==="askTxt"&&!e.shiftKey){e.preventDefault();askGo()}});
 document.addEventListener("change",async e=>{
   if(e.target.dataset.f12!=null){const i=+e.target.dataset.f12;e.target.checked?S.fault12.add(i):S.fault12.delete(i);f12();return}
