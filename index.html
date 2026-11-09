@@ -143,7 +143,7 @@ input[type=file]{display:none}
 .rep{background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:2px 14px;flex:none}
 .rep div{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px;line-height:1.4}
 .rep div:last-child{border:none}
-.rep span{flex:none;width:40px;color:var(--sub);font-size:12.5px;font-weight:700;padding-top:1px}
+.rep>div>span:first-child{flex:none;width:40px;color:var(--sub);font-size:12.5px;font-weight:700;padding-top:1px}
 .thumbs{display:flex;gap:6px;overflow-x:auto;flex:none}
 .thumbs img{width:64px;height:64px;object-fit:cover;border-radius:6px;flex:none;cursor:zoom-in}
 .dock{flex:none;background:var(--ink);padding:8px 10px calc(8px + env(safe-area-inset-bottom));display:grid;grid-template-columns:1fr 1fr 1.35fr;gap:6px}
@@ -166,13 +166,13 @@ textarea.talk{width:100%;min-height:96px;resize:none;border:1.5px solid var(--li
 .chips button{border:1.5px solid var(--line2);background:var(--card);border-radius:999px;padding:7px 12px;font-size:13.5px;cursor:pointer;text-align:left}
 .ans{background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;font-size:15px;line-height:1.55}
 .ans .q{font-size:13px;color:var(--sub);margin-bottom:4px}
-.ans .lw{font-family:var(--mono);font-size:11.5px;color:var(--sub);margin-top:6px}
+.ans .lw{font-size:12.5px;font-weight:700;color:var(--sub);margin-top:6px}
 .ans a.btn{margin-top:8px;min-height:44px;font-size:15.5px}
 .understood{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;background:var(--card);border:1.5px solid var(--ink);border-radius:10px;padding:12px 14px;font-size:15px}
 .understood span{color:var(--sub);font-size:13px;font-weight:700;padding-top:1px}
 .understood .q{color:var(--red);font-weight:700}
 .doc{background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;font-size:14.5px;line-height:1.65;white-space:pre-wrap}
-.doc h3{margin:0 0 6px;font-size:13px;font-family:var(--mono);letter-spacing:.4px;color:var(--sub);font-weight:600}
+.doc h3{margin:0 0 6px;font-size:13px;color:var(--sub);font-weight:800}
 .lb{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;gap:8px;color:#fff;font-size:13px}
 .lb img{max-width:100%;max-height:85dvh;border-radius:6px}
 .toast{position:fixed;left:50%;bottom:86px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:8px;font-size:14px;opacity:0;transition:.25s;pointer-events:none;z-index:70;max-width:90%;text-align:center;border-left:4px solid var(--y)}
@@ -669,7 +669,7 @@ R.report=()=>{
   const dn=A.filter(a=>S.done.has(a.id)).length;const miss=A.filter(a=>a.kind==="duty"&&!S.done.has(a.id)).length;
   return `<div class="eyebrow hs h7">07 리포트</div><h1>사고 기록</h1>
   <div class="rep">
-    <div><span>언제</span>${S.started?fmt(S.started):"-"}<br>${locText()}</div>
+    <div><span>언제</span><i style="font-style:normal">${S.started?fmt(S.started):"-"}<br>${locText()}</i></div>
     <div><span>유형</span>${PNAME[S.place]||"-"} · ${TNAME[S.type]||"-"}${RO} · 부상자 ${INAME[S.injured]||"-"}</div>
     ${S.type!=="single"?`<div><span>상대</span>${esc([S.other.name,S.other.phone,S.other.plate,S.other.insurer].filter(Boolean).join(" · "))||"미기록"}</div>`:""}
     <div><span>조치</span>할 일 ${dn}/${A.length} 완료${miss?` · <b style="color:var(--red)">법적 의무 ${miss}개 확인 필요</b>`:""}</div>
