@@ -2,7 +2,7 @@
    - 앱 화면(HTML)은 항상 네트워크 먼저: 새 버전이 바로 보이고, 신호가 없을 때만 저장본을 연다.
    - 글꼴·라이브러리·AI 모델 파일은 버전이 고정돼 있어 저장본 먼저.
    - AI 중계 서버 요청과 사진은 저장하지 않는다. */
-const V = "sagonavi-v1";
+const V = "sagonavi-v2";
 const CORE = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./apple-touch-icon.png"];
 const LIBS = [
   "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css",
@@ -19,7 +19,7 @@ self.addEventListener("fetch", (e) => {
   const r = e.request;
   if (r.method !== "GET") return;
   const u = new URL(r.url);
-  if (u.hostname.endsWith("netlify.app") || u.protocol === "data:" || u.protocol === "blob:") return;
+  if (u.hostname === "sago-navi-ai.netlify.app" || u.pathname.startsWith("/api/") || u.protocol === "data:" || u.protocol === "blob:") return;
   const html = r.mode === "navigate" || (u.origin === location.origin && (u.pathname.endsWith("/") || u.pathname.endsWith(".html")));
   if (html) {
     e.respondWith(fetch(r).then((res) => { if (res.ok) { const cp = res.clone(); caches.open(V).then((c) => c.put("./index.html", cp)); } return res; })
